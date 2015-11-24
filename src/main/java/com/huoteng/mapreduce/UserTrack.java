@@ -1,9 +1,6 @@
 package com.huoteng.mapreduce;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.apache.hadoop.fs.Path;
@@ -21,116 +18,57 @@ import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.mapred.TextOutputFormat;
 
+
 public class UserTrack {
 
     public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 
+        private Text keyText = new Text();
         private Text resultText = new Text();
 
+
+        /**
+         * key样例：MSID,date,status
+         * resultText样例：time,longitude,latitude
+         */
         public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
             String lineData = value.toString();
 
             String[] userTrack = lineData.split("\\|");
 
-            String userMSID = userTrack[0];
+            StringBuilder userMSID = new StringBuilder(userTrack[0] + ",");
+            String userDate = UserStatus.judgeUserDate(userTrack[1]);
+            userMSID.append(userDate);
 
-            int userState = judgeUserStatus(userTrack[1]);
-            String trackValue;
+            String trackValue = UserStatus.getUserTime(userTrack[1]) + "," + userTrack[4] + "," + userTrack[5];
 
-            String userStatus = "";
-            Text userKey;
-
-            switch (userState) {
-                case UserStatus.NO_NEED:
-                    break;
-                case UserStatus.WORK_TIME:
-                    trackValue = "1|" + userTrack[4] + "|" + userTrack[5];//统一用"|"分割:sum|Longitude|Latitude
-                    userStatus += UserStatus.WORK_TIME;
-                    userKey = new Text(userMSID + "|" + userStatus);
-                    output.collect(userKey, new Text(trackValue));
-                    break;
-                case UserStatus.HOME_TIME:
-                    trackValue = "1|" + userTrack[4] + "|" + userTrack[5];
-                    userStatus += UserStatus.HOME_TIME;
-                    userKey = new Text(userMSID + "|" + userStatus);
-                    resultText.set(trackValue);
-                    output.collect(userKey, resultText);
-                    break;
-                default:
-                    break;
-            }
-
-
+            keyText.set(userMSID.toString());
+            resultText.set(trackValue);
+            output.collect(keyText, resultText);
         }
 
-
-        /**
-         * completed
-         * 判断是否为有效时间
-         * @param dateString 需要判断的时间
-         * @return bool
-         */
-        public static int judgeUserStatus(String dateString) {
-
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            String date = dateString.substring(0, 11);
-
-            //设置有效时间
-            String strHomeStartTime = date + "00:00:00";
-            String strHomeEndTime = date + "05:00:00";
-            String strWorkStartTime = date + "10:00:00";
-            String strWorkEndTime = date + "16:00:00";
-
-            try {
-                Date userTime = dateFormat.parse(dateString.substring(0, 19));
-                Date homeStartTime = dateFormat.parse(strHomeStartTime);
-                Date homeEndTime = dateFormat.parse(strHomeEndTime);
-                Date workStartTime = dateFormat.parse(strWorkStartTime);
-                Date workEndTime = dateFormat.parse(strWorkEndTime);
-
-                DateFormat weekFormat = new SimpleDateFormat("E");
-                String week = weekFormat.format(userTime);
-
-                int result = 0;
-
-                if (week.equals("Sun") || week.equals("Sat")) {
-                    result = UserStatus.NO_NEED;
-                } else if (userTime.after(homeStartTime) && userTime.before(homeEndTime)) {
-                    result = UserStatus.HOME_TIME;
-                } else if ((userTime.after(workStartTime) && userTime.before(workEndTime))) {
-                    result = UserStatus.WORK_TIME;
-                }
-
-                return result;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return 0;
-            }
-        }
     }
-
 
 
     public static class Reduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
 
         private Text resultText = new Text();
 
+        /**
+         * value样例：time,longitude,latitude|time,longitude,latitude|time,longitude,latitude
+         */
         public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 
-            ReduceStatistics statistics = new ReduceStatistics();
+            StringBuilder result = new StringBuilder();
+
             while (values.hasNext()) {
-                String recordsStr = values.next().toString();
-
-                statistics.statisticsTrack(recordsStr);
+                result.append(values.next().toString());
+                result.append("|");
             }
 
-            String result = statistics.getResult().toString();
-
-            if (!result.equals("")) {
-                resultText.set(result);
-                output.collect(key, resultText);
-            }
+            result = result.deleteCharAt(result.length()-1);
+            resultText.set(result.toString());
+            output.collect(key, resultText);
         }
 
 
@@ -162,7 +100,7 @@ public class UserTrack {
          * setInputPath()：为map-reduce job设置路径数组作为输出列表
          */
 
-        String[] otherArgs=new String[]{"big_input","output2"}; /* 直接设置输入参数 */
+        String[] otherArgs=new String[]{"big_input","output2.0_0"}; /* 直接设置输入参数 */
         Path outputPath = new Path(otherArgs[1]);
         outputPath.getFileSystem(conf).delete(outputPath, true);
         FileInputFormat.setInputPaths(conf, new Path(otherArgs[0]));

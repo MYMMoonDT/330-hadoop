@@ -76,12 +76,12 @@ try {
 } 
 */
 
-   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-02 00:14:00.455487"));
-   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-01 00:14:00.455487"));
-   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-01 11:14:00.455487"));
-   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-02 11:14:00.455487"));
-   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-01 00:14:00.455487"));
-   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-01 11:14:00.455487"));
+//   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-02 00:14:00.455487"));
+//   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-01 00:14:00.455487"));
+//   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-01 11:14:00.455487"));
+//   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-02 11:14:00.455487"));
+//   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-01 00:14:00.455487"));
+//   System.out.println(UserTrack.Map.judgeUserStatus("2015-11-01 11:14:00.455487"));
 } 
 
 /** 
