@@ -36,7 +36,7 @@ public class UserTrack {
 
             String[] userTrack = lineData.split("\\|");
 
-            StringBuilder userMSID = new StringBuilder(userTrack[0] + ",");
+            StringBuffer userMSID = new StringBuffer(userTrack[0] + ",");
             String userDate = UserStatus.judgeUserDate(userTrack[1]);
             userMSID.append(userDate);
 
@@ -59,7 +59,7 @@ public class UserTrack {
          */
         public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 
-            StringBuilder result = new StringBuilder();
+            StringBuffer result = new StringBuffer();
 
             while (values.hasNext()) {
                 result.append(values.next().toString());
@@ -93,6 +93,8 @@ public class UserTrack {
 
         conf.setInputFormat(TextInputFormat.class);    //为map-reduce任务设置InputFormat实现类
         conf.setOutputFormat(TextOutputFormat.class);  //为map-reduce任务设置OutputFormat实现类
+
+        conf.set("mapred.reduce.child.java.opts", "-Xmx512m");
 
         /**
          * InputFormat描述map-reduce中对job的输入定义

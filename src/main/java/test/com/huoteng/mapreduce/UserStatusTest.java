@@ -29,8 +29,8 @@ public void after() throws Exception {
 */ 
 @Test
 public void testJudgeUserDate() throws Exception { 
-    System.out.println("TIME:" + UserStatus.getUserTime("2015-04-08 12:18:00.541373"));
-    System.out.println("DATE:" + UserStatus.judgeUserDate("2015-04-30 12:18:00.541373"));
+    System.out.println("TIME:" + UserStatus.getUserTime("2015-04-08 12:18:00"));
+//    System.out.println("DATE:" + UserStatus.judgeUserDate("2015-04-30 12:18:00"));
 } 
 
 /** 

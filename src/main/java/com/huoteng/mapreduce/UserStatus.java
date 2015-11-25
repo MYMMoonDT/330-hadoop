@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  *
@@ -15,9 +16,13 @@ public class UserStatus {
     static public final int NO_NEED = 1;
 
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     private static DateFormat weekFormat = new SimpleDateFormat("E");
 
-//    /**
+    static {
+        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+    }
+    /**
 //     * completed
 //     * 判断是否为有效时间
 //     * @param dateString 需要判断的时间
@@ -68,8 +73,8 @@ public class UserStatus {
      * @return 用户当前日期及状态字符串
      */
     public static String judgeUserDate(String dateString) {
-        String userDate = dateString.substring(0, 10);
-        StringBuilder result = new StringBuilder(userDate + ",");
+        String userDate = new String(dateString.substring(0, 10));
+        StringBuffer result = new StringBuffer(userDate + ",");
         /**
          * 需要在这里判断周末与工作日，并返回
          * 返回值样本：yyyy-MM-dd|status
@@ -98,8 +103,18 @@ public class UserStatus {
      * @return 用户当前时间字符串
      */
     public static String getUserTime(String dateString) {
-        String userTime = dateString.substring(11, 23);
+        String userTime = new String(dateString.substring(11, 19));
 
+        //需要把时间转换为double
+        try {
+            Date time = timeFormat.parse(userTime);
+            double i = time.getTime();
+            i = i / 864000;
+
+            userTime = "" + i;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return userTime;
     }
 }
