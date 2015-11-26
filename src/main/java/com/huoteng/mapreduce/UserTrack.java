@@ -40,7 +40,7 @@ public class UserTrack {
             String userDate = UserStatus.judgeUserDate(userTrack[1]);
             userMSID.append(userDate);
 
-            String trackValue = UserStatus.getUserTime(userTrack[1]) + "," + userTrack[4] + "," + userTrack[5];
+            String trackValue = UserStatus.getUserTime(userTrack[1]) + " " + userTrack[4] + " " + userTrack[5];
 
             keyText.set(userMSID.toString());
             resultText.set(trackValue);
@@ -89,7 +89,7 @@ public class UserTrack {
         conf.setMapperClass(Map.class);         //为job设置Mapper类
         conf.setCombinerClass(Reduce.class);      //为job设置Combiner类
         conf.setReducerClass(Reduce.class);        //为job设置Reduce类
-        conf.setNumReduceTasks(5);             //设置reduce任务的数量
+        conf.setNumReduceTasks(3);             //设置reduce任务的数量
 
         conf.setInputFormat(TextInputFormat.class);    //为map-reduce任务设置InputFormat实现类
         conf.setOutputFormat(TextOutputFormat.class);  //为map-reduce任务设置OutputFormat实现类
@@ -102,7 +102,7 @@ public class UserTrack {
          * setInputPath()：为map-reduce job设置路径数组作为输出列表
          */
 
-        String[] otherArgs=new String[]{"big_input","output2.0_0"}; /* 直接设置输入参数 */
+        String[] otherArgs=new String[]{"big_input","output2.0_coordinate"}; /* 直接设置输入参数 */
         Path outputPath = new Path(otherArgs[1]);
         outputPath.getFileSystem(conf).delete(outputPath, true);
         FileInputFormat.setInputPaths(conf, new Path(otherArgs[0]));

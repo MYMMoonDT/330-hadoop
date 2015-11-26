@@ -74,7 +74,8 @@ public class UserStatus {
      */
     public static String judgeUserDate(String dateString) {
         String userDate = new String(dateString.substring(0, 10));
-        StringBuffer result = new StringBuffer(userDate + ",");
+//        StringBuffer result = new StringBuffer(userDate + ",");
+        StringBuffer result = new StringBuffer("");
         /**
          * 需要在这里判断周末与工作日，并返回
          * 返回值样本：yyyy-MM-dd|status
