@@ -3,7 +3,6 @@ package com.huoteng.mapreduce;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -16,12 +15,15 @@ public class UserStatus {
     static public final int WEEKEND = 3;
     static public final int WEEKDAY = 2;
     static public final int NO_NEED = 1;
+    static public final int HOME = 4;
+    static public final int WORK = 5;
 
     static public final int TIME_00_00 = 86400;
     static public final int TIME_01_00 = 3600;
     static public final int TIME_02_00 = 7200;
     static public final int TIME_03_00 = 10800;
     static public final int TIME_04_00 = 14400;
+    static public final int TIME_08_50 = 31800;
     static public final int TIME_10_00 = 36000;
     static public final int TIME_11_00 = 39600;
     static public final int TIME_14_00 = 50400;
@@ -81,9 +83,31 @@ public class UserStatus {
 //        }
 //    }
 
+    public static String judgeUserPlace(String dateTimeString) {
+        String userTime = new String(dateTimeString.substring(11, 19));
+        StringBuffer result = new StringBuffer();
 
-    /** need test
-     *
+        try {
+            Date time = timeFormat.parse(userTime);
+            Date time_04_00 = timeFormat.parse("04:00:01");
+            Date time_10_00 = timeFormat.parse("09:59:59");
+            Date time_16_00 = timeFormat.parse("16:00:01");
+            Date time_20_00 = timeFormat.parse("19:59:59");
+
+            if (time.before(time_04_00) || time.after(time_20_00)) {
+                result.append(Integer.toString(HOME));
+            } else if (time.after(time_10_00) && time.before(time_16_00)) {
+                result.append(Integer.toString(WORK));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return result.toString();
+    }
+
+    /** completed
+     * 将时间转换为当天秒数返回
      * @param dateTimeString 用户当前日期时间字符串
      * @return 用户当前时间字符串
      */
@@ -93,9 +117,10 @@ public class UserStatus {
         //需要把时间转换为int
         try {
             Date time = timeFormat.parse(userTime);
-            int timeSecondNum = new Long(time.getTime()).intValue();
+//            System.out.println("dataTime" + time);
+            int timeSecondNum = new Long(time.getTime()).intValue() / 1000;
 
-            return timeSecondNum + "";
+            return Integer.toString(timeSecondNum);
         } catch (ParseException e) {
             e.printStackTrace();
 
@@ -103,20 +128,14 @@ public class UserStatus {
         }
     }
 
-    /** need test
-     * 判断时间是否需要
+    /** completed
+     * 判断时间是否是工作日
      * @param userDateTimeString 用户日期时间String
      * @return 是需要的时间段返回true
      */
     public static boolean judgeTimeValid(String userDateTimeString) {
 
         //判断时间是否有效        对于一天来说，共有<=5个休息地原始记录分别对应0:00, 1:00, 2:00, 3:00, 4:00      共有<=5个工作地原始记录分别对应10:00, 11:00, 14:00, 15:00, 16:00
-
-//        (2) 计算5个点半径1km内包含另外4个点有多少个，包括自身>=3个，该点通过测试条件，作为当天备选点
-//                (3) 当天备选点中包含其他点个数最多的点确定为当天的工作地点和休息地点，包含数量相同的情况下随机选择其中一个
-//                (4) 10个工作日可以确定<=10个工作地点和<=10个休息地点，从10个点中找到半径1km内包含另外点有多少个，包括自身>=6个，通过测试
-//                (5) 选取包含点数最多的备选点作为最后工作地和休息地结果
-
         //这次mapreduce任务只做工作日的
         String userDate = new String(userDateTimeString.substring(0, 10));
         boolean result = false;
@@ -125,12 +144,12 @@ public class UserStatus {
             Date userDateTime = dateFormat.parse(userDate);
             String week = weekFormat.format(userDateTime);
 
-            System.out.println("WEEK:" + week);
+//            System.out.println("WEEK:" + week);
             if (!(week.equals("Sun") || week.equals("Sat"))) {
                 String userTimeString = getUserTime(userDateTimeString);
                 int userTime = Integer.parseInt(userTimeString);
 
-                if ((userTime < TIME_04_00) || (userTime > TIME_10_00 && userTime < TIME_16_OO) || (userTime > TIME_20_00)) {
+                if ((userTime <= TIME_04_00) || (userTime >= TIME_10_00 && userTime <= TIME_16_OO) || (userTime >= TIME_20_00)) {
                     result = true;
                 }
             }
@@ -141,26 +160,114 @@ public class UserStatus {
         return result;
     }
 
-    /** uncomplete
+    /** completed
      * 根据要求得到在家的时间点
      * @param homeTimeCoordinates 已经按时间排好顺序，所有时间点的List
      * @return time,longitude,latitude|time,longitude,latitude|......
      */
     public static String getHomeTimePoint(List<Coordinate> homeTimeCoordinates) {
 
+        int[] fivePoints = {-1, -1, -1, -1, -1};
 
+        //以一个小时为间隔，找出最靠近整点的coordinate
+        //倒着遍历list，每次找到第一个整点之前的
+        for (int i = homeTimeCoordinates.size() - 1; i >= 0 ; i--) {
+            int currentTime = homeTimeCoordinates.get(i).time;
+            if ((-1 == fivePoints[0]) && (currentTime > TIME_20_00)) {
+                fivePoints[0] = i;
+            } else if ((-1 == fivePoints[4]) && (currentTime <= TIME_04_00) && (currentTime > TIME_03_00)) {
+                fivePoints[4] = i;
+            } else if ((-1 == fivePoints[3]) && (currentTime <= TIME_03_00) && (currentTime > TIME_02_00)) {
+                fivePoints[3] = i;
+            } else if ((-1 == fivePoints[2]) && (currentTime <= TIME_02_00) && (currentTime > TIME_01_00)) {
+                fivePoints[2] = i;
+            } else if ((-1 == fivePoints[1]) && (currentTime <= TIME_01_00) && (currentTime > 0)) {
+                fivePoints[1] = i;
+            }
+        }
 
+        for (int i = 0; i < 5; i++) {
+            if (-1 == fivePoints[i]) {
+                for (int j = i; j >= 0 ; j--) {
+                    if (-1 != fivePoints[j]) {
+                        fivePoints[i] = fivePoints[j];
+                        break;
+                    }
+                }
+            }
+        }
 
-        return "";
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < 5; i++) {
+            if (-1 != fivePoints[i]) {
+                Coordinate validCoordinate = homeTimeCoordinates.get(fivePoints[i]);
+                String tmp = validCoordinate.time + "," + validCoordinate.getLon() + "," + validCoordinate.getLat();
+                result.append(tmp);
+                result.append("|");
+            }
+        }
+        if (result.length() > 0) {
+            result.deleteCharAt(result.length()-1);
+        }
+
+        return result.toString();
+
     }
 
-    /** uncomplete
+
+
+
+    /** completed
      * 根据要求得到在工作地的时间点
      * @param workTimeCoordinates 已经按时间排好顺序，所有时间点的List
      * @return time,longitude,latitude|time,longitude,latitude|......
      */
     public static String getWorkTimePoint(List<Coordinate> workTimeCoordinates) {
+        int[] fivePoints = {-1, -1, -1, -1, -1};
 
-        return "";
+        //以一个小时为间隔，找出最靠近整点的coordinate
+        //倒着遍历list，每次找到第一个整点之前的
+        for (int i = workTimeCoordinates.size() - 1; i >= 0 ; i--) {
+            int currentTime = workTimeCoordinates.get(i).time;
+
+            if ((-1 == fivePoints[0]) && (currentTime > TIME_08_50) && (currentTime <= TIME_10_00)) {
+                fivePoints[0] = i;
+            } else if ((-1 == fivePoints[1] && (currentTime > TIME_10_00) && (currentTime <= TIME_11_00))) {
+                fivePoints[1] = i;
+            } else if ((-1 == fivePoints[2] && (currentTime > TIME_11_00) && (currentTime <= TIME_14_00))) {
+                fivePoints[2] = i;
+            } else if ((-1 == fivePoints[3] && (currentTime > TIME_14_00) && (currentTime <= TIME_15_00))) {
+                fivePoints[3] = i;
+            } else if ((-1 == fivePoints[4]) && (currentTime > TIME_15_00) && (currentTime <= TIME_16_OO)) {
+                fivePoints[4] = i;
+            }
+        }
+
+        for (int i = 0; i < 5; i++) {
+            if (-1 == fivePoints[i]) {
+                for (int j = i; j >= 0 ; j--) {
+                    if (-1 != fivePoints[j]) {
+                        fivePoints[i] = fivePoints[j];
+                        break;
+                    }
+                }
+            }
+        }
+
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < 5; i++) {
+            if (-1 != fivePoints[i]) {
+                Coordinate validCoordinate = workTimeCoordinates.get(fivePoints[i]);
+                String tmp = validCoordinate.time + "," + validCoordinate.getLon() + "," + validCoordinate.getLat();
+                result.append(tmp);
+                result.append("|");
+            }
+        }
+        if (result.length() > 0) {
+            result.deleteCharAt(result.length()-1);
+        }
+
+        return result.toString();
+
     }
 }

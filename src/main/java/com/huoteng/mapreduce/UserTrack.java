@@ -36,6 +36,8 @@ public class UserTrack {
                 StringBuffer keyStringBuffer = new StringBuffer(userTrack[0]);
                 keyStringBuffer.append("|");
                 keyStringBuffer.append(userTrack[1].substring(0, 10));
+                keyStringBuffer.append("|");
+                keyStringBuffer.append(UserStatus.judgeUserPlace(userTrack[0]));
 
                 //trackValue = time,longitude,latitude
                 String trackValue = UserStatus.getUserTime(userTrack[1]) + "," + userTrack[4] + "," + userTrack[5];
@@ -64,42 +66,26 @@ public class UserTrack {
 
                 String[] recordsArray = records.split("\\|");
                 for (String oneRecord : recordsArray) {
-                    String[] oneRecordArray = oneRecord.split(",");
+                    if (!oneRecord.equals("")) {
+                        String[] oneRecordArray = oneRecord.split(",");
 
-                    int userTime = Integer.parseInt(oneRecordArray[0]);
-                    coordinatesList.add(new Coordinate(oneRecordArray[2], oneRecordArray[1], userTime));
-                }
-            }
-
-            int before_04_00_index = 0;
-            int after_10_00_index = 0;
-            int before_16_00_index = 0;
-            int after_20_00_index = 0;
-            //考虑在这里不传入全部的coordinates，做一个优化
-            //这段代码需要重点测试
-            for (int i = 0; i < coordinatesList.size(); i++) {
-                int currentTime = coordinatesList.get(i).time;
-                if (currentTime < UserStatus.TIME_04_00) {
-                    before_04_00_index = i;
-                } else if (currentTime > UserStatus.TIME_10_00 && currentTime < UserStatus.TIME_16_OO ) {
-                    if (0 == after_10_00_index) {
-                        after_10_00_index = i;
-                        before_16_00_index = i;//这里是i还是i＋1
-                    } else {
-                        before_16_00_index = i;//问题同上
+                        int userTime = Integer.parseInt(oneRecordArray[0]);
+                        coordinatesList.add(new Coordinate(oneRecordArray[2], oneRecordArray[1], userTime));
                     }
-                } else if (currentTime > UserStatus.TIME_20_00) {
-                    after_20_00_index = i;
-                    break;
                 }
             }
 
-            List<Coordinate> homeTimeList = coordinatesList.subList(0, before_04_00_index);
-            homeTimeList.addAll(coordinatesList.subList(after_20_00_index, coordinatesList.size() - 1));
-            String homePointsString = UserStatus.getHomeTimePoint(homeTimeList);
-            String workPointString = UserStatus.getWorkTimePoint(coordinatesList.subList(after_10_00_index, before_16_00_index));
+            Collections.sort(coordinatesList);
 
-            resultText.set(homePointsString + "|" + workPointString);
+            String keyString = key.toString();
+            String[] tmp = keyString.split("\\|");
+            if (tmp[2].equals(UserStatus.HOME)) {
+                String homePointsString = UserStatus.getHomeTimePoint(coordinatesList);
+                resultText.set(homePointsString);
+            } else if (tmp[2].equals(UserStatus.WORK)) {
+                String workPointString = UserStatus.getWorkTimePoint(coordinatesList);
+                resultText.set(workPointString);
+            }
             output.collect(key, resultText);
         }
 
@@ -135,6 +121,7 @@ public class UserTrack {
          */
 
         String[] otherArgs=new String[]{"big_input","output2.0_coordinate"}; /* 直接设置输入参数 */
+//        String[] testArgs = new String[]{"input", "output_2.0"};
         Path outputPath = new Path(otherArgs[1]);
         outputPath.getFileSystem(conf).delete(outputPath, true);
         FileInputFormat.setInputPaths(conf, new Path(otherArgs[0]));
