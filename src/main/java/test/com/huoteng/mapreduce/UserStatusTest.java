@@ -112,7 +112,7 @@ public void testJudgeUserDate() throws Exception {
         }
 
 
-        System.out.println("VALID TIME:" + UserStatus.getWorkTimePoint(testCoordinates));
+        System.out.println("VALID TIME:" + UserStatus.getWorkTimePoint(testCoordinates, true));
     }
 
     @Test

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -153,7 +154,23 @@ try {
 * 
 */ 
 @Test
-public void testFindPlace() throws Exception { 
+public void testFindPlace() throws Exception {
+
+   ArrayList<Integer> test = new ArrayList<Integer>(){{
+      add(new Integer(1));
+      add(new Integer(12));
+      add(new Integer(13));
+      add(new Integer(14));
+      add(new Integer(15));
+   }};
+
+   test.set(1, null);
+   test.set(3, null);
+
+   ArrayList<Integer> tmp = new ArrayList<Integer>();
+   tmp.add(null);
+   test.removeAll(tmp);
+   System.out.print(test.toString());
 //TODO: Test goes here... 
 /* 
 try { 

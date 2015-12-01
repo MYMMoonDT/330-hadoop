@@ -165,7 +165,7 @@ public class UserStatus {
      * @param homeTimeCoordinates 已经按时间排好顺序，所有时间点的List
      * @return time,longitude,latitude|time,longitude,latitude|......
      */
-    public static String getHomeTimePoint(List<Coordinate> homeTimeCoordinates) {
+    public static String getHomeTimePoint(List<Coordinate> homeTimeCoordinates, boolean isReduce) {
 
         int[] fivePoints = {-1, -1, -1, -1, -1};
 
@@ -186,12 +186,14 @@ public class UserStatus {
             }
         }
 
-        for (int i = 0; i < 5; i++) {
-            if (-1 == fivePoints[i]) {
-                for (int j = i; j >= 0 ; j--) {
-                    if (-1 != fivePoints[j]) {
-                        fivePoints[i] = fivePoints[j];
-                        break;
+        if (isReduce) {
+            for (int i = 0; i < 5; i++) {
+                if (-1 == fivePoints[i]) {
+                    for (int j = i; j >= 0 ; j--) {
+                        if (-1 != fivePoints[j]) {
+                            fivePoints[i] = fivePoints[j];
+                            break;
+                        }
                     }
                 }
             }
@@ -222,7 +224,7 @@ public class UserStatus {
      * @param workTimeCoordinates 已经按时间排好顺序，所有时间点的List
      * @return time,longitude,latitude|time,longitude,latitude|......
      */
-    public static String getWorkTimePoint(List<Coordinate> workTimeCoordinates) {
+    public static String getWorkTimePoint(List<Coordinate> workTimeCoordinates, boolean isReduce) {
         int[] fivePoints = {-1, -1, -1, -1, -1};
 
         //以一个小时为间隔，找出最靠近整点的coordinate
@@ -243,12 +245,14 @@ public class UserStatus {
             }
         }
 
-        for (int i = 0; i < 5; i++) {
-            if (-1 == fivePoints[i]) {
-                for (int j = i; j >= 0 ; j--) {
-                    if (-1 != fivePoints[j]) {
-                        fivePoints[i] = fivePoints[j];
-                        break;
+        if (isReduce) {
+            for (int i = 0; i < 5; i++) {
+                if (-1 == fivePoints[i]) {
+                    for (int j = i; j >= 0 ; j--) {
+                        if (-1 != fivePoints[j]) {
+                            fivePoints[i] = fivePoints[j];
+                            break;
+                        }
                     }
                 }
             }

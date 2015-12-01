@@ -8,11 +8,13 @@ public class Coordinate implements Comparable<Coordinate> {
     private String lat;
     private String lon;
     public int time;
+    public int sum;
 
     public Coordinate(String lat, String lon, int time) {
         this.time = time;
         this.lat = lat;
         this.lon = lon;
+        sum = 1;
     }
 
     public String getLat() {

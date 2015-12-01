@@ -1,6 +1,7 @@
 package com.huoteng.analyzer;
 
 import com.huoteng.mapreduce.*;
+import com.huoteng.mapreduce.Coordinate;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -8,11 +9,11 @@ import org.apache.hadoop.mapred.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 /**
+ *
  * Created by teng on 11/30/15.
  */
 public class WorkHomePlace {
@@ -25,25 +26,38 @@ public class WorkHomePlace {
         public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
             String lineData = value.toString();
 
-            String[] userTrack = lineData.split("\\s");
-            String keyTimeString = userTrack[0];
-            String track = userTrack[1];
+            String[] userTrack = lineData.split("\\t");
 
-            String[] tracksArray = track.split("\\|");
+            if (userTrack.length >= 2) {
+                String keyTimePlaceString = userTrack[0];
+                String track = userTrack[1];
 
-//            if (UserStatus.judgeTimeValid(userTrack[1])) {
-//                //key = MSID|date
-//                StringBuffer keyStringBuffer = new StringBuffer(userTrack[0]);
-//                keyStringBuffer.append("|");
-//                keyStringBuffer.append(userTrack[1].substring(0, 10));
-//
-//                //trackValue = time,longitude,latitude
-//                String trackValue = UserStatus.getUserTime(userTrack[1]) + "," + userTrack[4] + "," + userTrack[5];
-//
-//                keyText.set(keyStringBuffer.toString());
-//                resultText.set(trackValue);
-//                output.collect(keyText, resultText);
-//            }
+                String[] tracksArray = track.split("\\|");
+
+                List<Coordinate> oneDayCoordinates = new ArrayList<Coordinate>();
+
+                for (String onePoint : tracksArray) {
+                    if (!onePoint.equals("")) {
+                        String[] pointDetail = onePoint.split(",");
+
+                        int time = Integer.parseInt(pointDetail[0]);
+                        oneDayCoordinates.add(new Coordinate(pointDetail[2], pointDetail[1], time));
+                    }
+                }
+
+                String reduceResult = ReduceStatistics.countPoint(oneDayCoordinates, 5, 3);
+                if (!reduceResult.equals("")) {
+                    //000015cac9cb2c30cb32de1dd5e149b3|2015-04-07|5
+                    String[] userMSIDTimePlace = keyTimePlaceString.split("\\|");
+
+                    keyText.set(userMSIDTimePlace[0] + "|" +  userMSIDTimePlace[2]);
+                    resultText.set(reduceResult);
+                    output.collect(keyText, resultText);
+                }
+            } else {
+                System.out.println("LINE:" + lineData);
+            }
+
         }
     }
 
@@ -57,20 +71,22 @@ public class WorkHomePlace {
          */
         public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 
-            List<com.huoteng.mapreduce.Coordinate> coordinatesList = new ArrayList<com.huoteng.mapreduce.Coordinate>();
+            List<Coordinate> coordinatesList = new ArrayList<Coordinate>();
 
             while (values.hasNext()) {
-                String records = values.next().toString();
+                String oneDayRecord = values.next().toString();
 
+                String[] recordDetail = oneDayRecord.split(",");
+                int time = Integer.parseInt(recordDetail[0]);
+                coordinatesList.add(new Coordinate(recordDetail[2], recordDetail[1], time));
             }
 
-//            Collections.sort(coordinatesList);
-//
-//            String homePointsString = UserStatus.getHomeTimePoint(coordinatesList);
-//            String workPointString = UserStatus.getWorkTimePoint(coordinatesList);
-//
-//            resultText.set(homePointsString + "|" + workPointString);
-//            output.collect(key, resultText);
+            //10天的数据取有6天以上认为有效
+            String result = ReduceStatistics.countPoint(coordinatesList, 10, 6);
+            if (!result.equals("")) {
+                resultText.set(result);
+                output.collect(key, resultText);
+            }
         }
 
 
@@ -83,13 +99,13 @@ public class WorkHomePlace {
          * 构造方法：JobConf()、JobConf(Class exampleClass)、JobConf(Configuration conf)等
          */
         JobConf conf = new JobConf(UserTrack.class);
-        conf.setJobName("StatisticsHomeWork");           //设置一个用户定义的job名称
+        conf.setJobName("CountHomeWorkPlace");           //设置一个用户定义的job名称
 
         conf.setOutputKeyClass(Text.class);    //为job的输出数据设置Key类
         conf.setOutputValueClass(Text.class);   //为job输出设置value类
 
         conf.setMapperClass(Map.class);         //为job设置Mapper类
-        conf.setCombinerClass(Reduce.class);      //为job设置Combiner类
+//        conf.setCombinerClass(Reduce.class);      //为job设置Combiner类
         conf.setReducerClass(Reduce.class);        //为job设置Reduce类
         conf.setNumReduceTasks(3);             //设置reduce任务的数量
 

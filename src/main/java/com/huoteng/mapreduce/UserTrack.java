@@ -37,7 +37,7 @@ public class UserTrack {
                 keyStringBuffer.append("|");
                 keyStringBuffer.append(userTrack[1].substring(0, 10));
                 keyStringBuffer.append("|");
-                keyStringBuffer.append(UserStatus.judgeUserPlace(userTrack[0]));
+                keyStringBuffer.append(UserStatus.judgeUserPlace(userTrack[1]));
 
                 //trackValue = time,longitude,latitude
                 String trackValue = UserStatus.getUserTime(userTrack[1]) + "," + userTrack[4] + "," + userTrack[5];
@@ -46,6 +46,46 @@ public class UserTrack {
                 resultText.set(trackValue);
                 output.collect(keyText, resultText);
             }
+        }
+    }
+
+
+
+    public static class Combine extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
+
+        private Text resultText = new Text();
+
+        public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+            List<Coordinate> coordinatesList = new ArrayList<Coordinate>();
+
+            while (values.hasNext()) {
+                String records = values.next().toString();
+
+                String[] recordsArray = records.split("\\|");
+                for (String oneRecord : recordsArray) {
+                    if (!oneRecord.equals("")) {
+                        String[] oneRecordArray = oneRecord.split(",");
+
+                        int userTime = Integer.parseInt(oneRecordArray[0]);
+                        coordinatesList.add(new Coordinate(oneRecordArray[2], oneRecordArray[1], userTime));
+                    }
+                }
+            }
+
+            Collections.sort(coordinatesList);
+
+
+
+            String keyString = key.toString();
+            String[] tmp = keyString.split("\\|");
+            if (tmp[2].equals(Integer.toString(UserStatus.HOME))) {
+                String homePointsString = UserStatus.getHomeTimePoint(coordinatesList, false);
+                resultText.set(homePointsString);
+            } else if (tmp[2].equals(Integer.toString(UserStatus.WORK))) {
+                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList, false);
+                resultText.set(worksPointString);
+            }
+            output.collect(key, resultText);
         }
     }
 
@@ -79,14 +119,15 @@ public class UserTrack {
 
             String keyString = key.toString();
             String[] tmp = keyString.split("\\|");
-            if (tmp[2].equals(UserStatus.HOME)) {
-                String homePointsString = UserStatus.getHomeTimePoint(coordinatesList);
+            if (tmp[2].equals(Integer.toString(UserStatus.HOME))) {
+                String homePointsString = UserStatus.getHomeTimePoint(coordinatesList, true);
                 resultText.set(homePointsString);
-            } else if (tmp[2].equals(UserStatus.WORK)) {
-                String workPointString = UserStatus.getWorkTimePoint(coordinatesList);
-                resultText.set(workPointString);
+            } else if (tmp[2].equals(Integer.toString(UserStatus.WORK))) {
+                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList, true);
+                resultText.set(worksPointString);
             }
             output.collect(key, resultText);
+
         }
 
 
@@ -105,7 +146,7 @@ public class UserTrack {
         conf.setOutputValueClass(Text.class);   //为job输出设置value类
 
         conf.setMapperClass(Map.class);         //为job设置Mapper类
-        conf.setCombinerClass(Reduce.class);      //为job设置Combiner类
+        conf.setCombinerClass(Combine.class);      //为job设置Combiner类
         conf.setReducerClass(Reduce.class);        //为job设置Reduce类
         conf.setNumReduceTasks(3);             //设置reduce任务的数量
 
@@ -120,7 +161,7 @@ public class UserTrack {
          * setInputPath()：为map-reduce job设置路径数组作为输出列表
          */
 
-        String[] otherArgs=new String[]{"big_input","output2.0_coordinate"}; /* 直接设置输入参数 */
+        String[] otherArgs=new String[]{"big_input","middle"}; /* 直接设置输入参数 */
 //        String[] testArgs = new String[]{"input", "output_2.0"};
         Path outputPath = new Path(otherArgs[1]);
         outputPath.getFileSystem(conf).delete(outputPath, true);

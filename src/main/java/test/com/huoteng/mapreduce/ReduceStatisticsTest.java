@@ -1,9 +1,10 @@
 package test.com.huoteng.mapreduce; 
 
-import com.huoteng.mapreduce.ReduceStatistics;
 import org.junit.Test;
 import org.junit.Before; 
-import org.junit.After; 
+import org.junit.After;
+
+import java.io.*;
 
 /** 
 * ReduceStatistics Tester. 
@@ -89,18 +90,20 @@ try {
 * 
 */ 
 @Test
-public void testRad() throws Exception { 
-//TODO: Test goes here... 
-/* 
-try { 
-   Method method = ReduceStatistics.getClass().getMethod("rad", double.class); 
-   method.setAccessible(true); 
-   method.invoke(<Object>, <Parameters>); 
-} catch(NoSuchMethodException e) { 
-} catch(IllegalAccessException e) { 
-} catch(InvocationTargetException e) { 
-} 
-*/ 
+public void testRad() throws Exception {
+   File inputFile = new File("/Users/huoteng/Desktop/output/part-00000_local");
+
+   InputStream input = new FileInputStream(inputFile);
+   BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+
+   String line = reader.readLine();
+   System.out.println("LINE:" + line);
+
+
+   String[] result = line.split("\\t");
+   System.out.println("A:" + result[0]);
+   System.out.println("B:" + result[1]);
+
 } 
 
    /**
