@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,70 +50,75 @@ public void testJudgeUserDate() throws Exception {
 
     @Test
     public void testJudgeTimeValid() throws Exception {
-        System.out.println("VALID:" + UserStatus.judgeTimeValid("2015-04-05 11:00:00"));
+//        System.out.println("VALID:" + UserStatus.judgeTimeValid("2015-04-05 19:00:00"));
+        String test = "2015-04-01";
+        int day = Integer.parseInt(test.substring(8, 10));
+        day++;
+        test = test.substring(0, 8) + new DecimalFormat("00").format(day);
+        System.out.println(test);
     }
 
     @Test
     public void testGetHome_WorkTimePoint() throws Exception {
-        List<Coordinate> testCoordinates = new ArrayList<Coordinate>();
+//        List<Coordinate> testCoordinates = new ArrayList<Coordinate>();
 
-        String secondString = UserStatus.getUserTime("2015-04-07 22:18:00.541373");
-        int secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.654400", "115.839400", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 21:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 20:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 19:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 04:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 05:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 06:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 13:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 08:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 09:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        secondString = UserStatus.getUserTime("2015-04-07 00:18:00.229876");
-        secondNum = Integer.parseInt(secondString);
-        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
-
-        for (Coordinate i : testCoordinates) {
-            System.out.println("TIME:" + i.time);
-        }
-
-        System.out.println();
-        Collections.sort(testCoordinates);
-
-        for (Coordinate i : testCoordinates) {
-            System.out.println("TIME:" + i.time);
-        }
-
-
-        System.out.println("VALID TIME:" + UserStatus.getWorkTimePoint(testCoordinates, true));
+//        String secondString = UserStatus.getUserTime("2015-04-07 22:18:00.541373");
+//        int secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.654400", "115.839400", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 21:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 20:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 19:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 04:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 05:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 06:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 13:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 08:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 09:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        secondString = UserStatus.getUserTime("2015-04-07 00:18:00.229876");
+//        secondNum = Integer.parseInt(secondString);
+//        testCoordinates.add(new Coordinate("28.615400", "115.959500", secondNum));
+//
+//        for (Coordinate i : testCoordinates) {
+//            System.out.println("TIME:" + i.time);
+//        }
+//
+//        System.out.println();
+//        Collections.sort(testCoordinates);
+//
+//        for (Coordinate i : testCoordinates) {
+//            System.out.println("TIME:" + i.time);
+//        }
+//
+//
+//        System.out.println("VALID TIME:" + UserStatus.getWorkTimePoint(testCoordinates, true));
     }
 
     @Test

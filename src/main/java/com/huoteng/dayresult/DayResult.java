@@ -1,30 +1,27 @@
-package com.huoteng.mapreduce;
+package com.huoteng.dayresult;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.*;
-
+import com.huoteng.mapreduce.Coordinate;
+import com.huoteng.mapreduce.UserStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.FileInputFormat;
-import org.apache.hadoop.mapred.FileOutputFormat;
-import org.apache.hadoop.mapred.JobClient;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.MapReduceBase;
-import org.apache.hadoop.mapred.Mapper;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.Reducer;
-import org.apache.hadoop.mapred.Reporter;
-import org.apache.hadoop.mapred.TextInputFormat;
-import org.apache.hadoop.mapred.TextOutputFormat;
+import org.apache.hadoop.mapred.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * 统计每个人的家和工作的可疑点
+ * 统计每个整点的各个基站的人数
+ * 先找出每天每个人在每个整点附近的位置，每个人最多有24个点
+ * 然后按天统计每个点的人数
+ * 这样不太好啊
  * Created by teng on 12/1/15.
  */
 
-public class UserTrack {
+public class DayResult{
 
     public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 
@@ -40,23 +37,12 @@ public class UserTrack {
                 //key = MSID|date
                 StringBuffer keyStringBuffer = new StringBuffer(userTrack[0]);
                 keyStringBuffer.append("|");
-
-                String userDate = new String(userTrack[1].substring(0, 10));
-                int userPlace = Integer.parseInt(UserStatus.judgeUserPlace(userTrack[1]));
-                int userTime = UserStatus.getUserTime(userTrack[1]);
-                if (UserStatus.HOME == userPlace && userTime > UserStatus.TIME_16_OO) {
-                    //在提取休息地点的时候需要将20到24点的点算在前一天内
-                    int day = Integer.parseInt(userDate.substring(8, 10));
-                    day++;
-                    userDate = userDate.substring(0, 8) + new DecimalFormat("00").format(day);
-                }
-
-                keyStringBuffer.append(userDate);
+                keyStringBuffer.append(userTrack[1].substring(0, 10));
                 keyStringBuffer.append("|");
-                keyStringBuffer.append(userPlace);
+                keyStringBuffer.append(UserStatus.judgeUserPlace(userTrack[1]));
 
                 //trackValue = time,longitude,latitude
-                String trackValue = userTime + "," + userTrack[4] + "," + userTrack[5];
+                String trackValue = UserStatus.getUserTime(userTrack[1]) + "," + userTrack[4] + "," + userTrack[5];
 
                 keyText.set(keyStringBuffer.toString());
                 resultText.set(trackValue);
@@ -155,7 +141,7 @@ public class UserTrack {
          * JobConf：map/reduce的job配置类，向hadoop框架描述map-reduce执行的工作
          * 构造方法：JobConf()、JobConf(Class exampleClass)、JobConf(Configuration conf)等
          */
-        JobConf conf = new JobConf(UserTrack.class);
+        JobConf conf = new JobConf(DayResult.class);
         conf.setJobName("GetUserPoint");           //设置一个用户定义的job名称
 
         conf.setOutputKeyClass(Text.class);    //为job的输出数据设置Key类

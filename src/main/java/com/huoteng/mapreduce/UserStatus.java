@@ -66,17 +66,17 @@ public class UserStatus {
 //            DateFormat weekFormat = new SimpleDateFormat("E");
 //            String week = weekFormat.format(userTime);
 //
-//            int result = 0;
+//            int isValidTime = 0;
 //
 //            if (week.equals("Sun") || week.equals("Sat")) {
-//                result = UserStatus.NO_NEED;
+//                isValidTime = UserStatus.NO_NEED;
 //            } else if (userTime.after(homeStartTime) && userTime.before(homeEndTime)) {
-//                result = UserStatus.HOME_TIME;
+//                isValidTime = UserStatus.HOME_TIME;
 //            } else if ((userTime.after(workStartTime) && userTime.before(workEndTime))) {
-//                result = UserStatus.WORK_TIME;
+//                isValidTime = UserStatus.WORK_TIME;
 //            }
 //
-//            return result;
+//            return isValidTime;
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //            return 0;
@@ -85,7 +85,7 @@ public class UserStatus {
 
     public static String judgeUserPlace(String dateTimeString) {
         String userTime = new String(dateTimeString.substring(11, 19));
-        StringBuffer result = new StringBuffer();
+        StringBuffer isValidTime = new StringBuffer();
 
         try {
             Date time = timeFormat.parse(userTime);
@@ -95,15 +95,15 @@ public class UserStatus {
             Date time_20_00 = timeFormat.parse("19:59:59");
 
             if (time.before(time_04_00) || time.after(time_20_00)) {
-                result.append(Integer.toString(HOME));
+                isValidTime.append(Integer.toString(HOME));
             } else if (time.after(time_10_00) && time.before(time_16_00)) {
-                result.append(Integer.toString(WORK));
+                isValidTime.append(Integer.toString(WORK));
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return result.toString();
+        return isValidTime.toString();
     }
 
     /** completed
@@ -111,7 +111,7 @@ public class UserStatus {
      * @param dateTimeString 用户当前日期时间字符串
      * @return 用户当前时间字符串
      */
-    public static String getUserTime(String dateTimeString) {
+    public static int getUserTime(String dateTimeString) {
         String userTime = new String(dateTimeString.substring(11, 19));
 
         //需要把时间转换为int
@@ -120,11 +120,11 @@ public class UserStatus {
 //            System.out.println("dataTime" + time);
             int timeSecondNum = new Long(time.getTime()).intValue() / 1000;
 
-            return Integer.toString(timeSecondNum);
+            return timeSecondNum;
         } catch (ParseException e) {
             e.printStackTrace();
 
-            return null;
+            return -1;
         }
     }
 
@@ -138,26 +138,24 @@ public class UserStatus {
         //判断时间是否有效        对于一天来说，共有<=5个休息地原始记录分别对应0:00, 1:00, 2:00, 3:00, 4:00      共有<=5个工作地原始记录分别对应10:00, 11:00, 14:00, 15:00, 16:00
         //这次mapreduce任务只做工作日的
         String userDate = new String(userDateTimeString.substring(0, 10));
-        boolean result = false;
+        boolean isValidTime = false;
 
         try {
             Date userDateTime = dateFormat.parse(userDate);
             String week = weekFormat.format(userDateTime);
 
-//            System.out.println("WEEK:" + week);
-            if (!(week.equals("Sun") || week.equals("Sat"))) {
-                String userTimeString = getUserTime(userDateTimeString);
-                int userTime = Integer.parseInt(userTimeString);
-
+            System.out.println("WEEK:" + week);
+            int userTime = getUserTime(userDateTimeString);
+            if (!((week.equals("Sun") && userTime < TIME_20_00) || week.equals("Sat") || (week.equals("Fri") && userTime > TIME_16_OO))) {
                 if ((userTime <= TIME_04_00) || (userTime >= TIME_10_00 && userTime <= TIME_16_OO) || (userTime >= TIME_20_00)) {
-                    result = true;
+                    isValidTime = true;
                 }
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return result;
+        return isValidTime;
     }
 
     /** completed
@@ -199,20 +197,20 @@ public class UserStatus {
             }
         }
 
-        StringBuffer result = new StringBuffer();
+        StringBuffer isValidTime = new StringBuffer();
         for (int i = 0; i < 5; i++) {
             if (-1 != fivePoints[i]) {
                 Coordinate validCoordinate = homeTimeCoordinates.get(fivePoints[i]);
                 String tmp = validCoordinate.time + "," + validCoordinate.getLon() + "," + validCoordinate.getLat();
-                result.append(tmp);
-                result.append("|");
+                isValidTime.append(tmp);
+                isValidTime.append("|");
             }
         }
-        if (result.length() > 0) {
-            result.deleteCharAt(result.length()-1);
+        if (isValidTime.length() > 0) {
+            isValidTime.deleteCharAt(isValidTime.length()-1);
         }
 
-        return result.toString();
+        return isValidTime.toString();
 
     }
 
@@ -258,20 +256,20 @@ public class UserStatus {
             }
         }
 
-        StringBuffer result = new StringBuffer();
+        StringBuffer isValidTime = new StringBuffer();
         for (int i = 0; i < 5; i++) {
             if (-1 != fivePoints[i]) {
                 Coordinate validCoordinate = workTimeCoordinates.get(fivePoints[i]);
                 String tmp = validCoordinate.time + "," + validCoordinate.getLon() + "," + validCoordinate.getLat();
-                result.append(tmp);
-                result.append("|");
+                isValidTime.append(tmp);
+                isValidTime.append("|");
             }
         }
-        if (result.length() > 0) {
-            result.deleteCharAt(result.length()-1);
+        if (isValidTime.length() > 0) {
+            isValidTime.deleteCharAt(isValidTime.length()-1);
         }
 
-        return result.toString();
+        return isValidTime.toString();
 
     }
 }

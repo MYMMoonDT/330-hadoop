@@ -60,58 +60,38 @@ public class ReduceStatistics {
      * @param countStandard 剩余数量
      * @return 结果
      */
-    public static String countPoint(List<Coordinate> oneDayPoints, int sum, int countStandard) {
+    public static String countPoint(List<Coordinate> oneDayPoints, int countStandard) {
 
+
+        //这里有问题
+        //应该遍历所有点，最后找出sum最大的点，判断是否大于等于要求的countStandard，如果大于等于认为该点有效
+        //考虑如果value是空，mapreduce如何处理
         if (oneDayPoints.size() >= countStandard) {
             for (int i = 0; i < oneDayPoints.size(); i++) {
-                if (null == oneDayPoints.get(i)) {
-                    continue;
-                }
-                for (int j = 0; j < i; j++) {
-                    if (null == oneDayPoints.get(j)) {
+                for (int j = 0; j < oneDayPoints.size(); j++) {
+                    if ( i == j) {
                         continue;
                     }
                     if (twoPointIsClose(oneDayPoints.get(i), oneDayPoints.get(j))) {
-                        oneDayPoints.get(i).sum += oneDayPoints.get(j).sum;
-                        oneDayPoints.set(j, null);
+                        oneDayPoints.get(i).sum++;
                     }
                 }
             }
-
-
-            ArrayList<Coordinate> tmp = new ArrayList<Coordinate>();
-            tmp.add(null);
-            oneDayPoints.removeAll(tmp);
 
             String result = "";
-            if (oneDayPoints.size() <= (sum + 1 - countStandard)) {
-                for (Coordinate point : oneDayPoints) {
-                    if (point.sum >= countStandard) {
-                        result = point.time + "," + point.getLon() + "," + point.getLat();
-                        break;
-                    }
+            Coordinate max = oneDayPoints.get(0);
+            for (Coordinate point : oneDayPoints) {
+                if (point.sum > max.sum) {
+                    max = point;
                 }
             }
+            if (max.sum >= countStandard) {
+                result = max.time + "," + max.getLon() + "," + max.getLat();
+            }
+
             return result;
         } else {
             return "";
         }
     }
-
-
-
-
-
-//    public void statisticsTrack(String recordsStr) {
-//
-//        //将所有记录全部放入history
-//        String[] recordsArray = recordsStr.split(",");
-//        for (String i : recordsArray) {
-//            String[] detail = i.split("\\|");
-//            int sum = Integer.parseInt(detail[0]);
-//            historyCoordinates.add(new Coordinate(detail[2], detail[1], sum));
-//        }
-//    }
-
-
 }

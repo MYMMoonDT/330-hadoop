@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
+ * 对每个人家的可疑点进行筛选，找出居住地和工作地
  * Created by teng on 11/30/15.
  */
 public class WorkHomePlace {
@@ -45,7 +45,7 @@ public class WorkHomePlace {
                     }
                 }
 
-                String reduceResult = ReduceStatistics.countPoint(oneDayCoordinates, 5, 3);
+                String reduceResult = ReduceStatistics.countPoint(oneDayCoordinates, 3);
                 if (!reduceResult.equals("")) {
                     //000015cac9cb2c30cb32de1dd5e149b3|2015-04-07|5
                     String[] userMSIDTimePlace = keyTimePlaceString.split("\\|");
@@ -82,7 +82,7 @@ public class WorkHomePlace {
             }
 
             //10天的数据取有6天以上认为有效
-            String result = ReduceStatistics.countPoint(coordinatesList, 10, 6);
+            String result = ReduceStatistics.countPoint(coordinatesList, 6);
             if (!result.equals("")) {
                 resultText.set(result);
                 output.collect(key, resultText);
