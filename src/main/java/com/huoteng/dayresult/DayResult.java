@@ -31,23 +31,7 @@ public class DayResult{
         public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
             String lineData = value.toString();
 
-            String[] userTrack = lineData.split("\\|");
 
-            if (UserStatus.judgeTimeValid(userTrack[1])) {
-                //key = MSID|date
-                StringBuffer keyStringBuffer = new StringBuffer(userTrack[0]);
-                keyStringBuffer.append("|");
-                keyStringBuffer.append(userTrack[1].substring(0, 10));
-                keyStringBuffer.append("|");
-                keyStringBuffer.append(UserStatus.judgeUserPlace(userTrack[1]));
-
-                //trackValue = time,longitude,latitude
-                String trackValue = UserStatus.getUserTime(userTrack[1]) + "," + userTrack[4] + "," + userTrack[5];
-
-                keyText.set(keyStringBuffer.toString());
-                resultText.set(trackValue);
-                output.collect(keyText, resultText);
-            }
         }
     }
 
@@ -63,30 +47,10 @@ public class DayResult{
             while (values.hasNext()) {
                 String records = values.next().toString();
 
-                String[] recordsArray = records.split("\\|");
-                for (String oneRecord : recordsArray) {
-                    if (!oneRecord.equals("")) {
-                        String[] oneRecordArray = oneRecord.split(",");
 
-                        int userTime = Integer.parseInt(oneRecordArray[0]);
-                        coordinatesList.add(new Coordinate(oneRecordArray[2], oneRecordArray[1], userTime));
-                    }
-                }
             }
 
-            Collections.sort(coordinatesList);
 
-
-
-            String keyString = key.toString();
-            String[] tmp = keyString.split("\\|");
-            if (tmp[2].equals(Integer.toString(UserStatus.HOME))) {
-                String homePointsString = UserStatus.getHomeTimePoint(coordinatesList, false);
-                resultText.set(homePointsString);
-            } else if (tmp[2].equals(Integer.toString(UserStatus.WORK))) {
-                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList, false);
-                resultText.set(worksPointString);
-            }
             output.collect(key, resultText);
         }
     }
@@ -106,28 +70,10 @@ public class DayResult{
             while (values.hasNext()) {
                 String records = values.next().toString();
 
-                String[] recordsArray = records.split("\\|");
-                for (String oneRecord : recordsArray) {
-                    if (!oneRecord.equals("")) {
-                        String[] oneRecordArray = oneRecord.split(",");
 
-                        int userTime = Integer.parseInt(oneRecordArray[0]);
-                        coordinatesList.add(new Coordinate(oneRecordArray[2], oneRecordArray[1], userTime));
-                    }
-                }
             }
 
-            Collections.sort(coordinatesList);
 
-            String keyString = key.toString();
-            String[] tmp = keyString.split("\\|");
-            if (tmp[2].equals(Integer.toString(UserStatus.HOME))) {
-                String homePointsString = UserStatus.getHomeTimePoint(coordinatesList, true);
-                resultText.set(homePointsString);
-            } else if (tmp[2].equals(Integer.toString(UserStatus.WORK))) {
-                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList, true);
-                resultText.set(worksPointString);
-            }
             output.collect(key, resultText);
 
         }

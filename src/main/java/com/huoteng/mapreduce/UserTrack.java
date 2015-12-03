@@ -98,7 +98,7 @@ public class UserTrack {
                 String homePointsString = UserStatus.getHomeTimePoint(coordinatesList, false);
                 resultText.set(homePointsString);
             } else if (tmp[2].equals(Integer.toString(UserStatus.WORK))) {
-                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList, false);
+                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList);
                 resultText.set(worksPointString);
             }
             output.collect(key, resultText);
@@ -139,7 +139,7 @@ public class UserTrack {
                 String homePointsString = UserStatus.getHomeTimePoint(coordinatesList, true);
                 resultText.set(homePointsString);
             } else if (tmp[2].equals(Integer.toString(UserStatus.WORK))) {
-                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList, true);
+                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList);
                 resultText.set(worksPointString);
             }
             output.collect(key, resultText);
