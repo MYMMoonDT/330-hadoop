@@ -26,6 +26,7 @@ public class UserStatus {
     static public final int TIME_08_50 = 31800;
     static public final int TIME_10_00 = 36000;
     static public final int TIME_11_00 = 39600;
+    static public final int TIME_13_00 = 46800;
     static public final int TIME_14_00 = 50400;
     static public final int TIME_15_00 = 54000;
     static public final int TIME_16_OO = 57600;
@@ -173,13 +174,17 @@ public class UserStatus {
             int currentTime = homeTimeCoordinates.get(i).time;
             if ((-1 == fivePoints[0]) && (currentTime > TIME_20_00)) {
                 fivePoints[0] = i;
-            } else if ((-1 == fivePoints[4]) && (currentTime <= TIME_04_00) && (currentTime > TIME_03_00)) {
+            }
+            if ((-1 == fivePoints[4]) && (currentTime <= TIME_04_00) && (currentTime > TIME_03_00)) {
                 fivePoints[4] = i;
-            } else if ((-1 == fivePoints[3]) && (currentTime <= TIME_03_00) && (currentTime > TIME_02_00)) {
+            }
+            if ((-1 == fivePoints[3]) && (currentTime <= TIME_03_00) && (currentTime > TIME_02_00)) {
                 fivePoints[3] = i;
-            } else if ((-1 == fivePoints[2]) && (currentTime <= TIME_02_00) && (currentTime > TIME_01_00)) {
+            }
+            if ((-1 == fivePoints[2]) && (currentTime <= TIME_02_00) && (currentTime > TIME_01_00)) {
                 fivePoints[2] = i;
-            } else if ((-1 == fivePoints[1]) && (currentTime <= TIME_01_00) && (currentTime > 0)) {
+            }
+            if ((-1 == fivePoints[1]) && (currentTime <= TIME_01_00) && (currentTime > 0)) {
                 fivePoints[1] = i;
             }
         }
@@ -222,7 +227,7 @@ public class UserStatus {
      * @param workTimeCoordinates 已经按时间排好顺序，所有时间点的List
      * @return time,longitude,latitude|time,longitude,latitude|......
      */
-    public static String getWorkTimePoint(List<Coordinate> workTimeCoordinates) {
+    public static String getWorkTimePoint(List<Coordinate> workTimeCoordinates, boolean isReduce) {
         int[] fivePoints = {-1, -1, -1, -1, -1};
 
         //以一个小时为间隔，找出最靠近整点的coordinate
@@ -230,16 +235,16 @@ public class UserStatus {
         for (int i = workTimeCoordinates.size() - 1; i >= 0 ; i--) {
             int currentTime = workTimeCoordinates.get(i).time;
 
-            if ((-1 == fivePoints[0]) && (currentTime <= TIME_16_OO) && (currentTime > TIME_08_50)) {
+            if ((-1 == fivePoints[0]) && (currentTime <= TIME_16_OO) && (currentTime > TIME_15_00)) {
                 fivePoints[0] = i;
             }
-            if ((-1 == fivePoints[1] && (currentTime <= TIME_15_00) && (currentTime > TIME_08_50))) {
+            if ((-1 == fivePoints[1] && (currentTime <= TIME_15_00) && (currentTime > TIME_14_00))) {
                 fivePoints[1] = i;
             }
-            if ((-1 == fivePoints[2] && (currentTime <= TIME_14_00) && (currentTime > TIME_08_50))) {
+            if ((-1 == fivePoints[2] && (currentTime <= TIME_14_00) && (currentTime > TIME_11_00))) {
                 fivePoints[2] = i;
             }
-            if ((-1 == fivePoints[3] && (currentTime <= TIME_11_00) && (currentTime > TIME_08_50))) {
+            if ((-1 == fivePoints[3] && (currentTime <= TIME_11_00) && (currentTime > TIME_10_00))) {
                 fivePoints[3] = i;
             }
             if ((-1 == fivePoints[4]) && (currentTime <= TIME_10_00) && (currentTime > TIME_08_50)) {
@@ -247,18 +252,18 @@ public class UserStatus {
             }
         }
 
-//        if (isReduce) {
-//            for (int i = 0; i < 5; i++) {
-//                if (-1 == fivePoints[i]) {
-//                    for (int j = i; j >= 0 ; j--) {
-//                        if (-1 != fivePoints[j]) {
-//                            fivePoints[i] = fivePoints[j];
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        if (isReduce) {
+            for (int i = 0; i < 5; i++) {
+                if (-1 == fivePoints[i]) {
+                    for (int j = i; j >= 0 ; j--) {
+                        if (-1 != fivePoints[j]) {
+                            fivePoints[i] = fivePoints[j];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
         StringBuffer isValidTime = new StringBuffer();
         for (int i = 0; i < 5; i++) {
