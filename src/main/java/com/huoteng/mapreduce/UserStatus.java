@@ -235,20 +235,20 @@ public class UserStatus {
         for (int i = workTimeCoordinates.size() - 1; i >= 0 ; i--) {
             int currentTime = workTimeCoordinates.get(i).time;
 
-            if ((-1 == fivePoints[0]) && (currentTime <= TIME_16_OO) && (currentTime > TIME_15_00)) {
-                fivePoints[0] = i;
+            if ((-1 == fivePoints[4]) && (currentTime <= TIME_16_OO) && (currentTime > TIME_15_00)) {
+                fivePoints[4] = i;
             }
-            if ((-1 == fivePoints[1] && (currentTime <= TIME_15_00) && (currentTime > TIME_14_00))) {
-                fivePoints[1] = i;
+            if ((-1 == fivePoints[3] && (currentTime <= TIME_15_00) && (currentTime > TIME_14_00))) {
+                fivePoints[3] = i;
             }
             if ((-1 == fivePoints[2] && (currentTime <= TIME_14_00) && (currentTime > TIME_11_00))) {
                 fivePoints[2] = i;
             }
-            if ((-1 == fivePoints[3] && (currentTime <= TIME_11_00) && (currentTime > TIME_10_00))) {
-                fivePoints[3] = i;
+            if ((-1 == fivePoints[1] && (currentTime <= TIME_11_00) && (currentTime > TIME_10_00))) {
+                fivePoints[1] = i;
             }
-            if ((-1 == fivePoints[4]) && (currentTime <= TIME_10_00) && (currentTime > TIME_08_50)) {
-                fivePoints[4] = i;
+            if ((-1 == fivePoints[0]) && (currentTime <= TIME_10_00) && (currentTime > TIME_08_50)) {
+                fivePoints[0] = i;
             }
         }
 

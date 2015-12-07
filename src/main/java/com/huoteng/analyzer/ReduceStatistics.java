@@ -22,7 +22,7 @@ public class ReduceStatistics {
      * @return 两点是否足够近
      */
 
-    private static boolean twoPointIsClose(Coordinate c1, Coordinate c2) {
+    public static boolean twoPointIsClose(Coordinate c1, Coordinate c2) {
 
         double lng1 = Double.parseDouble(c1.getLon());
         double lat1 = Double.parseDouble(c1.getLat());

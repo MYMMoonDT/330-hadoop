@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact name="PersonCount:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/PersonCount_jar</output-path>
+    <root id="root">
+      <element id="archive" name="MapReduce.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/src/main/java/com/huoteng/count/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="MapReduce" />
+      </element>
+      <element id="library" level="project" name="Maven: org.pentaho.pentaho-commons:pentaho-package-manager:1.0.11" />
+      <element id="library" level="project" name="Maven: com.googlecode.sizeofag:sizeofag:1.0.0" />
+      <element id="library" level="project" name="Maven: nz.ac.waikato.cms.weka:weka-dev:3.7.13" />
+      <element id="library" level="project" name="Maven: nz.ac.waikato.cms.moa:moa:2012.08" />
+      <element id="library" level="project" name="Maven: junit:junit:4.12" />
+      <element id="library" level="project" name="Maven: nz.ac.waikato.cms.weka.thirdparty:java-cup-11b-runtime:2015.03.26" />
+      <element id="library" level="module" name="hadoop2.7.1" module-name="MapReduce" />
+      <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.3" />
+      <element id="library" level="project" name="Maven: nz.ac.waikato.cms.weka.thirdparty:java-cup-11b:2015.03.26" />
+    </root>
+  </artifact>
+</component>

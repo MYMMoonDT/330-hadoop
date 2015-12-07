@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="CountResult:jar" />
-      <artifact name="MapReduce:jar" />
+      <artifact name="PersonCount:jar" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
@@ -22,23 +21,20 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/MapReduce$UserTrackTest_testTwoPointIsClose.coverage" NAME="UserTrackTest.testTwoPointIsClose Coverage Results" MODIFIED="1446691664381" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>test.com.huoteng.mapreduce.*</FILTER>
-    </SUITE>
     <SUITE FILE_PATH="coverage/MapReduce$UserStatusTest_testGetHomeTimePoint.coverage" NAME="UserStatusTest.testGetHomeTimePoint Coverage Results" MODIFIED="1448852483961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>test.com.huoteng.mapreduce.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/MapReduce$UserTrackTest_testJudgeUserStatus.coverage" NAME="UserTrackTest.testJudgeUserStatus Coverage Results" MODIFIED="1446691075993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/MapReduce$ReduceStatisticsTest_testGetDistance.coverage" NAME="ReduceStatisticsTest.testGetDistance Coverage Results" MODIFIED="1449148121868" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>test.com.huoteng.mapreduce.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/MapReduce$UserStatusTest_testJudgeUserPlace.coverage" NAME="UserStatusTest.testJudgeUserPlace Coverage Results" MODIFIED="1448873292287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>test.com.huoteng.mapreduce.*</FILTER>
+    <SUITE FILE_PATH="coverage/MapReduce$DayResultTest_testNewtPointIsClosed.coverage" NAME="DayResultTest.testNewtPointIsClosed Coverage Results" MODIFIED="1449473265349" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>test.com.huoteng.dayresult.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/MapReduce$UserStatusTest_testJudgeUserDate.coverage" NAME="UserStatusTest.testJudgeUserDate Coverage Results" MODIFIED="1448851298746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>test.com.huoteng.mapreduce.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/MapReduce$UserStatusTest_testGetHome_WorkTimePoint.coverage" NAME="UserStatusTest.testGetHome_WorkTimePoint Coverage Results" MODIFIED="1448929657521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>test.com.huoteng.mapreduce.*</FILTER>
+    <SUITE FILE_PATH="coverage/MapReduce$DayResultTest_testGetSharpTime.coverage" NAME="DayResultTest.testGetSharpTime Coverage Results" MODIFIED="1449472423180" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>test.com.huoteng.dayresult.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/MapReduce$UserStatusTest_testJudgeTimeValid.coverage" NAME="UserStatusTest.testJudgeTimeValid Coverage Results" MODIFIED="1449049036510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>test.com.huoteng.mapreduce.*</FILTER>
@@ -50,6 +46,18 @@
       <FILTER>test.com.huoteng.mapreduce.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/MapReduce$ReduceStatisticsTest_testSortCoordinates.coverage" NAME="ReduceStatisticsTest.testSortCoordinates Coverage Results" MODIFIED="1447050851234" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>test.com.huoteng.mapreduce.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/MapReduce$UserTrackTest_testTwoPointIsClose.coverage" NAME="UserTrackTest.testTwoPointIsClose Coverage Results" MODIFIED="1446691664381" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>test.com.huoteng.mapreduce.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/MapReduce$UserTrackTest_testJudgeUserStatus.coverage" NAME="UserTrackTest.testJudgeUserStatus Coverage Results" MODIFIED="1446691075993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>test.com.huoteng.mapreduce.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/MapReduce$UserStatusTest_testJudgeUserPlace.coverage" NAME="UserStatusTest.testJudgeUserPlace Coverage Results" MODIFIED="1448873292287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>test.com.huoteng.mapreduce.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/MapReduce$UserStatusTest_testGetHome_WorkTimePoint.coverage" NAME="UserStatusTest.testGetHome_WorkTimePoint Coverage Results" MODIFIED="1448929657521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>test.com.huoteng.mapreduce.*</FILTER>
     </SUITE>
   </component>
@@ -65,11 +73,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="UserTrack.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/UserTrack.java">
+      <file leaf-file-name="PersonCountMain.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/count/PersonCountMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="100" column="55" selection-start-line="100" selection-start-column="55" selection-end-line="100" selection-end-column="55" />
+            <state vertical-scroll-proportion="0.18983051">
+              <caret line="51" column="46" selection-start-line="51" selection-start-column="46" selection-end-line="51" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -77,11 +85,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MSIDCount.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/MSIDCount.java">
+      <file leaf-file-name="MRPersonNumCount.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/count/MRPersonNumCount.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+              <caret line="24" column="38" selection-start-line="24" selection-start-column="38" selection-end-line="24" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -89,46 +97,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DayResult.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/dayresult/DayResult.java">
+      <file leaf-file-name="MRWashData.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/count/MRWashData.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="103" column="23" selection-start-line="103" selection-start-column="23" selection-end-line="103" selection-end-column="23" />
+              <caret line="89" column="82" selection-start-line="89" selection-start-column="82" selection-end-line="89" selection-end-column="82" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserStatus.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/UserStatus.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="250" column="34" selection-start-line="250" selection-start-column="34" selection-end-line="250" selection-end-column="34" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlaceStatistics.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/PlaceStatistics.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WorkHomePlace.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/WorkHomePlace.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.2542373">
-              <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -166,19 +142,24 @@
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/Coordinate.java" />
         <option value="$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/UserTrackTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/ReduceStatistics.java" />
-        <option value="$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/ReduceStatisticsTest.java" />
         <option value="$PROJECT_DIR$/src/main/resources/core-site.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/Temp.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/HomePlace.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/PlaceStatistics.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/WorkPlace.java" />
         <option value="$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/UserStatusTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/ReduceStatistics.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/WorkHomePlace.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/huoteng/dayresult/DayResult.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/MSIDCount.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/UserTrack.java" />
+        <option value="$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/ReduceStatisticsTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/ReduceStatistics.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/UserStatus.java" />
+        <option value="$PROJECT_DIR$/src/main/java/test/com/huoteng/dayresult/DayResultTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huoteng/dayresult/DayResult.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huoteng/count/DayResult.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huoteng/count/MRPersonNumCount.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huoteng/count/MRWashData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huoteng/count/PersonCountMain.java" />
       </list>
     </option>
   </component>
@@ -230,9 +211,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -399,7 +377,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="dayresult" />
+              <option name="myItemId" value="count" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -435,6 +413,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -445,13 +426,13 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
     <property name="FullScreen" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/huoteng/analyzer" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/huoteng/count" />
     <property name="recentsLimit" value="5" />
     <property name="dynamic.classpath" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
@@ -465,97 +446,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.UserStatusTest.testJudgeTimeValid">
-    <configuration default="false" name="UserTrack" type="Application" factoryName="Application" editBeforeRun="true" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.huoteng.mapreduce.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="com.huoteng.mapreduce.UserTrack" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="hdfs://10.60.38.32:9000/user/hadoop/big_input hdfs://10.60.38.32:9000/user/hadoop/middle" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="MapReduce" />
-      <envs />
-      <method>
-        <option name="BuildArtifacts" enabled="true">
-          <artifact name="MapReduce:jar" />
-        </option>
-      </method>
-    </configuration>
-    <configuration default="false" name="WorkHomePlace" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.huoteng.analyzer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="com.huoteng.analyzer.WorkHomePlace" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="MapReduce" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="UserStatusTest.testGetHome_WorkTimePoint" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="test.com.huoteng.mapreduce.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="MapReduce" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="test.com.huoteng.mapreduce" />
-      <option name="MAIN_CLASS_NAME" value="test.com.huoteng.mapreduce.UserStatusTest" />
-      <option name="METHOD_NAME" value="testGetHome_WorkTimePoint" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="HomePlace" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.huoteng.analyzer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="com.huoteng.analyzer.HomePlace" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="MapReduce" />
-      <envs />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.ReduceStatisticsTest.testGetDistance">
     <configuration default="false" name="UserStatusTest.testJudgeTimeValid" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -573,6 +464,32 @@
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="ReduceStatisticsTest.testGetDistance" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="test.com.huoteng.mapreduce.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="MapReduce" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="PACKAGE_NAME" value="test.com.huoteng.mapreduce" />
+      <option name="MAIN_CLASS_NAME" value="test.com.huoteng.mapreduce.ReduceStatisticsTest" />
+      <option name="METHOD_NAME" value="testGetDistance" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
@@ -858,21 +775,15 @@
       </RunnerSettings>
       <method />
     </configuration>
-    <list size="6">
-      <item index="0" class="java.lang.String" itemvalue="Remote.Hadoop-UesrTrack" />
-      <item index="1" class="java.lang.String" itemvalue="Application.UserTrack" />
-      <item index="2" class="java.lang.String" itemvalue="Application.WorkHomePlace" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.UserStatusTest.testGetHome_WorkTimePoint" />
-      <item index="4" class="java.lang.String" itemvalue="Application.HomePlace" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.UserStatusTest.testJudgeTimeValid" />
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.UserStatusTest.testJudgeTimeValid" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.ReduceStatisticsTest.testGetDistance" />
+      <item index="2" class="java.lang.String" itemvalue="Remote.Hadoop-UesrTrack" />
     </list>
     <recent_temporary>
-      <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.UserStatusTest.testJudgeTimeValid" />
-        <item index="1" class="java.lang.String" itemvalue="Application.HomePlace" />
-        <item index="2" class="java.lang.String" itemvalue="Application.UserTrack" />
-        <item index="3" class="java.lang.String" itemvalue="Application.WorkHomePlace" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.UserStatusTest.testGetHome_WorkTimePoint" />
+      <list size="2">
+        <item index="0" class="java.lang.String" itemvalue="JUnit.ReduceStatisticsTest.testGetDistance" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.UserStatusTest.testJudgeTimeValid" />
       </list>
     </recent_temporary>
   </component>
@@ -934,11 +845,15 @@
       <workItem from="1449102705823" duration="348000" />
       <workItem from="1449103556492" duration="1416000" />
       <workItem from="1449126747074" duration="948000" />
+      <workItem from="1449147555629" duration="594000" />
+      <workItem from="1449148588189" duration="639000" />
+      <workItem from="1449454483441" duration="8808000" />
+      <workItem from="1449473674913" duration="2315000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="117282000" />
+    <option name="totallyTimeSpent" value="129638000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="4" y="23" width="1436" height="877" extended-state="6" />
@@ -952,25 +867,25 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39490446" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23314203" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2687898" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" x="100" y="-800" width="1240" height="700" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" x="100" y="100" width="1240" height="700" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39490446" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1886657" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26930693" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1024,10 +939,31 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/UserStatusTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/core-site.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="114" column="92" selection-start-line="114" selection-start-column="92" selection-end-line="114" selection-end-column="92" />
+          <caret line="22" column="34" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/hdfs-site.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/UserTrackTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="98" column="39" selection-start-line="98" selection-start-column="39" selection-end-line="98" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -1049,9 +985,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1080,45 +1014,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/Coordinate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/UserStatus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/UserTrack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/core-site.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="34" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/hdfs-site.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1133,22 +1028,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/UserTrackTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="98" column="39" selection-start-line="98" selection-start-column="39" selection-end-line="98" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1163,7 +1042,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="20" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1171,7 +1049,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1179,7 +1056,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1187,7 +1063,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1195,7 +1070,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1203,7 +1077,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1218,7 +1091,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1233,7 +1105,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1248,7 +1119,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1256,7 +1126,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1264,7 +1133,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1272,7 +1140,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1280,7 +1147,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1288,7 +1154,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1303,7 +1168,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16802444">
           <caret line="11" column="18" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1318,7 +1182,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1326,7 +1189,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1337,21 +1199,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/ReduceStatisticsTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/Coordinate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.076271184">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/UserStatusTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1359,10 +1206,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/ReduceStatistics.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/PlaceStatistics.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="62" column="67" selection-start-line="62" selection-start-column="67" selection-end-line="62" selection-end-column="67" />
+          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/test/com/huoteng/mapreduce/ReduceStatisticsTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.46532437">
+          <caret line="77" column="10" selection-start-line="77" selection-start-column="10" selection-end-line="77" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -1370,19 +1224,40 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/Coordinate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.05944518">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/UserStatus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.521978">
+          <caret line="53" column="18" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/dayresult/DayResult.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/ReduceStatistics.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="103" column="23" selection-start-line="103" selection-start-column="23" selection-end-line="103" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="62" column="25" selection-start-line="62" selection-start-column="25" selection-end-line="62" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/WorkHomePlace.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="84" column="48" selection-start-line="84" selection-start-column="48" selection-end-line="84" selection-end-column="48" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1390,35 +1265,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="100" column="55" selection-start-line="100" selection-start-column="55" selection-end-line="100" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/count/MRPersonNumCount.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="38" selection-start-line="24" selection-start-column="38" selection-end-line="24" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/mapreduce/UserStatus.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/count/MRWashData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="250" column="34" selection-start-line="250" selection-start-column="34" selection-end-line="250" selection-end-column="34" />
+          <caret line="89" column="82" selection-start-line="89" selection-start-column="82" selection-end-line="89" selection-end-column="82" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/PlaceStatistics.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/count/PersonCountMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huoteng/analyzer/WorkHomePlace.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.2542373">
-          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.18983051">
+          <caret line="51" column="46" selection-start-line="51" selection-start-column="46" selection-end-line="51" selection-end-column="46" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1428,7 +1305,7 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>CountResult:jar</last-edited>
+          <last-edited>PersonCount:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

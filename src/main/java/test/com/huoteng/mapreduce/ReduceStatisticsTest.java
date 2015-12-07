@@ -1,5 +1,6 @@
 package test.com.huoteng.mapreduce; 
 
+import com.huoteng.analyzer.ReduceStatistics;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
@@ -70,7 +71,10 @@ try {
 * 
 */ 
 @Test
-public void testGetDistance() throws Exception { 
+public void testGetDistance() throws Exception {
+
+//   double result = ReduceStatistics.getDistance(115.0, 30.0, 114.0, 30.0);
+//   System.out.println("REULST:" + result);
 //TODO: Test goes here... 
 /* 
 try { 
@@ -104,8 +108,7 @@ public void testRad() throws Exception {
    System.out.println("A:" + result[0]);
    System.out.println("B:" + result[1]);
 
-} 
-
+}
    /**
    *
    * Method: sortCoordinates(ArrayList<Coordinate> coordinateArray)
