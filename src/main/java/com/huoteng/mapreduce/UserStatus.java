@@ -91,13 +91,13 @@ public class UserStatus {
         try {
             Date time = timeFormat.parse(userTime);
             Date time_04_00 = timeFormat.parse("04:00:01");
-            Date time_10_00 = timeFormat.parse("09:59:59");
+            Date time_08_50 = timeFormat.parse("08:49:59");
             Date time_16_00 = timeFormat.parse("16:00:01");
             Date time_20_00 = timeFormat.parse("19:59:59");
 
             if (time.before(time_04_00) || time.after(time_20_00)) {
                 isValidTime.append(Integer.toString(HOME));
-            } else if (time.after(time_10_00) && time.before(time_16_00)) {
+            } else if (time.after(time_08_50) && time.before(time_16_00)) {
                 isValidTime.append(Integer.toString(WORK));
             }
         } catch (ParseException e) {
@@ -147,8 +147,9 @@ public class UserStatus {
 
             System.out.println("WEEK:" + week);
             int userTime = getUserTime(userDateTimeString);
+            //增加工作地时间范围，之前从10:00开始
             if (!((week.equals("Sun") && userTime < TIME_20_00) || week.equals("Sat") || (week.equals("Fri") && userTime > TIME_16_OO))) {
-                if ((userTime <= TIME_04_00) || (userTime >= TIME_10_00 && userTime <= TIME_16_OO) || (userTime >= TIME_20_00)) {
+                if ((userTime <= TIME_04_00) || (userTime >= TIME_08_50 && userTime <= TIME_16_OO) || (userTime >= TIME_20_00)) {
                     isValidTime = true;
                 }
             }
@@ -168,24 +169,32 @@ public class UserStatus {
 
         int[] fivePoints = {-1, -1, -1, -1, -1};
 
-        //以一个小时为间隔，找出最靠近整点的coordinate
-        //倒着遍历list，每次找到第一个整点之前的
+        // 倒序遍历list，找到离0点最近的作为0点、1点、2点、3点、4点可能的位置
         for (int i = homeTimeCoordinates.size() - 1; i >= 0 ; i--) {
             int currentTime = homeTimeCoordinates.get(i).time;
-            if ((-1 == fivePoints[0]) && (currentTime > TIME_20_00)) {
+            if((-1 == fivePoints[0]) && (currentTime > TIME_20_00)) {
                 fivePoints[0] = i;
-            }
-            if ((-1 == fivePoints[4]) && (currentTime <= TIME_04_00) && (currentTime > TIME_03_00)) {
+                fivePoints[1] = i;
+                fivePoints[2] = i;
+                fivePoints[3] = i;
                 fivePoints[4] = i;
             }
-            if ((-1 == fivePoints[3]) && (currentTime <= TIME_03_00) && (currentTime > TIME_02_00)) {
-                fivePoints[3] = i;
+        }
+
+        // 正序遍历list，找到最接近1点、2点、3点、4点可能的位置
+        for(int i = 0; i < homeTimeCoordinates.size(); i++) {
+            int currentTime = homeTimeCoordinates.get(i).time;
+            if ((currentTime <= TIME_01_00) && (currentTime > 0)) {
+                fivePoints[1] = i;
             }
-            if ((-1 == fivePoints[2]) && (currentTime <= TIME_02_00) && (currentTime > TIME_01_00)) {
+            if ((currentTime <= TIME_02_00) && (currentTime > TIME_01_00)) {
                 fivePoints[2] = i;
             }
-            if ((-1 == fivePoints[1]) && (currentTime <= TIME_01_00) && (currentTime > 0)) {
-                fivePoints[1] = i;
+            if ((currentTime <= TIME_03_00) && (currentTime > TIME_02_00)) {
+                fivePoints[3] = i;
+            }
+            if ((currentTime <= TIME_04_00) && (currentTime > TIME_03_00)) {
+                fivePoints[4] = i;
             }
         }
 
@@ -230,25 +239,24 @@ public class UserStatus {
     public static String getWorkTimePoint(List<Coordinate> workTimeCoordinates, boolean isReduce) {
         int[] fivePoints = {-1, -1, -1, -1, -1};
 
-        //以一个小时为间隔，找出最靠近整点的coordinate
-        //倒着遍历list，每次找到第一个整点之前的
-        for (int i = workTimeCoordinates.size() - 1; i >= 0 ; i--) {
+        // 正序遍历list，找到最接近10点、11点、14点、15点、16点的位置
+        for (int i = 0; i < workTimeCoordinates.size(); i++) {
             int currentTime = workTimeCoordinates.get(i).time;
 
-            if ((-1 == fivePoints[4]) && (currentTime <= TIME_16_OO) && (currentTime > TIME_15_00)) {
-                fivePoints[4] = i;
+            if((currentTime <= TIME_10_00) && (currentTime > TIME_08_50)) {
+                fivePoints[0] = i;
             }
-            if ((-1 == fivePoints[3] && (currentTime <= TIME_15_00) && (currentTime > TIME_14_00))) {
-                fivePoints[3] = i;
-            }
-            if ((-1 == fivePoints[2] && (currentTime <= TIME_14_00) && (currentTime > TIME_11_00))) {
-                fivePoints[2] = i;
-            }
-            if ((-1 == fivePoints[1] && (currentTime <= TIME_11_00) && (currentTime > TIME_10_00))) {
+            if((currentTime <= TIME_11_00) && (currentTime > TIME_08_50)) {
                 fivePoints[1] = i;
             }
-            if ((-1 == fivePoints[0]) && (currentTime <= TIME_10_00) && (currentTime > TIME_08_50)) {
-                fivePoints[0] = i;
+            if((currentTime <= TIME_14_00) && (currentTime > TIME_08_50)) {
+                fivePoints[2] = i;
+            }
+            if((currentTime <= TIME_15_00) && (currentTime > TIME_08_50)) {
+                fivePoints[3] = i;
+            }
+            if((currentTime <= TIME_16_OO) && (currentTime > TIME_08_50)) {
+                fivePoints[4] = i;
             }
         }
 
