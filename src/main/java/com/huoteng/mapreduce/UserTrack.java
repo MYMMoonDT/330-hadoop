@@ -44,7 +44,7 @@ public class UserTrack {
                 String userDate = new String(userTrack[1].substring(0, 10));
                 int userPlace = Integer.parseInt(UserStatus.judgeUserPlace(userTrack[1]));
                 int userTime = UserStatus.getUserTime(userTrack[1]);
-                if (UserStatus.HOME == userPlace && userTime > UserStatus.TIME_16_OO) {
+                if (UserStatus.HOME == userPlace && userTime >= UserStatus.TIME_20_00) {
                     //在提取休息地点的时候需要将20到24点的点算在前一天内
                     int day = Integer.parseInt(userDate.substring(8, 10));
                     day++;
