@@ -4,8 +4,8 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
-
-import java.io.FileOutputStream;
+import org.apache.hadoop.mapred.jobcontrol.JobControl;
+import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
 
 /**
  *  统计工作日每天每个整点每个基站的人数
@@ -18,13 +18,9 @@ public class PersonCountMain {
      * @param args
      * @throws Exception
      */
-    public static void main(String[] args) throws Exception
-    {
-        /**
-         * JobjobWashDataConf：map/reduce的job配置类，向hadoop框架描述map-reduce执行的工作
-         * 构造方法：JobjobWashDataConf()、JobjobWashDataConf(Class exampleClass)、JobjobWashDataConf(jobWashDataConfiguration jobWashDataConf)等
-         */
-        //job1
+    public static void main(String[] args) throws Exception {
+
+        //job1 configuration
         JobConf jobWashDataConf = new JobConf(MRWashData.class);
         jobWashDataConf.setJobName("WashData");           //设置一个用户定义的job名称
 
@@ -41,44 +37,44 @@ public class PersonCountMain {
 
 //        jobWashDataConf.set("mapred.reduce.child.java.opts", "-Xmx512m");
 
-        /**
-         * InputFormat描述map-reduce中对job的输入定义
-         * setInputPaths():为map-reduce job设置路径数组作为输入列表
-         * setInputPath()：为map-reduce job设置路径数组作为输出列表
-         */
+        Path rawDatainput = new Path("big_input");
+//        Path inputPath = new Path("input");//test
+        Path middle_countPersonNumoutputPath = new Path("middle_CountPersonNum");
+        middle_countPersonNumoutputPath.getFileSystem(jobWashDataConf).delete(middle_countPersonNumoutputPath, true);
+        FileInputFormat.setInputPaths(jobWashDataConf, rawDatainput);
+        FileOutputFormat.setOutputPath(jobWashDataConf, middle_countPersonNumoutputPath);
 
-        Path inputPath = new Path("big_input");
-//        Path inputPath = new Path("test");//test
-        Path outputPath = new Path("middle_CountPersonNum");
-        outputPath.getFileSystem(jobWashDataConf).delete(outputPath, true);
-        FileInputFormat.setInputPaths(jobWashDataConf, inputPath);
-        FileOutputFormat.setOutputPath(jobWashDataConf, outputPath);
+        ControlledJob jobWashData = new ControlledJob(jobWashDataConf);
 
-        JobClient.runJob(jobWashDataConf);
+        
+        //job2 configuration
+        JobConf jobCountConf = new JobConf(MRPersonNumCount.class);
+        jobCountConf.setJobName("CountSum");
 
+        jobCountConf.setOutputKeyClass(Text.class);
+        jobCountConf.setOutputValueClass(IntWritable.class);
 
+        jobCountConf.setMapperClass(MRPersonNumCount.PersonCountMap.class);
+        jobCountConf.setCombinerClass(MRPersonNumCount.PersonCountReduce.class);
+        jobCountConf.setReducerClass(MRPersonNumCount.PersonCountReduce.class);
+        jobCountConf.setNumReduceTasks(3);
 
-        //job2
-        JobConf jobCount = new JobConf(MRPersonNumCount.class);
-        jobCount.setJobName("CountSum");
+        jobCountConf.setInputFormat(TextInputFormat.class);
+        jobCountConf.setOutputFormat(TextOutputFormat.class);
 
-        jobCount.setOutputKeyClass(Text.class);
-        jobCount.setOutputValueClass(IntWritable.class);
+        Path middle_countPersonNum = new Path("middle_CountPersonNum");
+        Path result_countPersonNum = new Path("result_CountPersonNum");
+        result_countPersonNum.getFileSystem(jobCountConf).delete(result_countPersonNum, true);
+        FileInputFormat.setInputPaths(jobCountConf, middle_countPersonNum);
+        FileOutputFormat.setOutputPath(jobCountConf, result_countPersonNum);
 
-        jobCount.setMapperClass(MRPersonNumCount.PersonCountMap.class);
-        jobCount.setCombinerClass(MRPersonNumCount.PersonCountReduce.class);
-        jobCount.setReducerClass(MRPersonNumCount.PersonCountReduce.class);
-        jobCount.setNumReduceTasks(3);
+        ControlledJob jobCount = new ControlledJob(jobCountConf);
+        jobCount.addDependingJob(jobWashData);
 
-        jobCount.setInputFormat(TextInputFormat.class);
-        jobCount.setOutputFormat(TextOutputFormat.class);
+        JobControl control = new JobControl("PersonCount");
+        control.addJob(jobWashData);
+        control.addJob(jobCount);
 
-        inputPath = new Path("middle_CountPersonNum");
-        outputPath = new Path("result_CountPersonNum");
-        outputPath.getFileSystem(jobWashDataConf).delete(outputPath, true);
-        FileInputFormat.setInputPaths(jobCount, inputPath);
-        FileOutputFormat.setOutputPath(jobCount, outputPath);
-
-        JobClient.runJob(jobCount);
+        control.run();
     }
 }
