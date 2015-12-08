@@ -1,4 +1,4 @@
-package com.huoteng.count;
+package com.huoteng.baseCount;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -75,6 +75,21 @@ public class PersonCountMain {
         control.addJob(jobWashData);
         control.addJob(jobCount);
 
-        control.run();
+//        control.run();
+
+        Thread thread = new Thread(control);
+        thread.start();
+        while (true) {
+            if (control.allFinished()) {
+                System.out.println(control.getSuccessfulJobs());
+                control.stop();
+                System.exit(0);
+            }
+            if (control.getFailedJobs().size() > 0) {
+                System.out.println(control.getFailedJobList());
+                control.stop();
+                System.exit(0);
+            }
+        }
     }
 }

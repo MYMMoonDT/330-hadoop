@@ -1,9 +1,6 @@
-package com.huoteng.analyzer;
-
-import com.huoteng.mapreduce.Coordinate;
+package com.huoteng.placeAnalyzer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -56,7 +53,6 @@ public class ReduceStatistics {
     /**
      * 统计五个点
      * @param oneDayPoints 需要统计的list
-     * @param sum 总数
      * @param countStandard 剩余数量
      * @return 结果
      */

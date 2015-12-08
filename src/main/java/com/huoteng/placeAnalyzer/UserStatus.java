@@ -1,4 +1,4 @@
-package com.huoteng.mapreduce;
+package com.huoteng.placeAnalyzer;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -39,50 +39,6 @@ public class UserStatus {
     static {
         timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
-    /**
-//     * completed
-//     * 判断是否为有效时间
-//     * @param dateString 需要判断的时间
-//     * @return bool
-//     */
-//    public static int judgeUserStatus(String dateString) {
-//
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//
-//        String date = dateString.substring(0, 11);
-//
-//        //设置有效时间
-//        String strHomeStartTime = date + "00:00:00";
-//        String strHomeEndTime = date + "05:00:00";
-//        String strWorkStartTime = date + "10:00:00";
-//        String strWorkEndTime = date + "16:00:00";
-//
-//        try {
-//            Date userTime = dateFormat.parse(dateString.substring(0, 19));
-//            Date homeStartTime = dateFormat.parse(strHomeStartTime);
-//            Date homeEndTime = dateFormat.parse(strHomeEndTime);
-//            Date workStartTime = dateFormat.parse(strWorkStartTime);
-//            Date workEndTime = dateFormat.parse(strWorkEndTime);
-//
-//            DateFormat weekFormat = new SimpleDateFormat("E");
-//            String week = weekFormat.format(userTime);
-//
-//            int isValidTime = 0;
-//
-//            if (week.equals("Sun") || week.equals("Sat")) {
-//                isValidTime = UserStatus.NO_NEED;
-//            } else if (userTime.after(homeStartTime) && userTime.before(homeEndTime)) {
-//                isValidTime = UserStatus.HOME_TIME;
-//            } else if ((userTime.after(workStartTime) && userTime.before(workEndTime))) {
-//                isValidTime = UserStatus.WORK_TIME;
-//            }
-//
-//            return isValidTime;
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//            return 0;
-//        }
-//    }
 
     public static String judgeUserPlace(String dateTimeString) {
         String userTime = new String(dateTimeString.substring(11, 19));

@@ -1,6 +1,6 @@
-package com.huoteng.analyzer;
+package com.huoteng.msidSumCount;
 
-import com.huoteng.mapreduce.Coordinate;
+import com.huoteng.placeAnalyzer.Coordinate;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;

@@ -1,4 +1,4 @@
-package com.huoteng.count;
+package com.huoteng.baseCount;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;

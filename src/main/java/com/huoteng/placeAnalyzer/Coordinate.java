@@ -1,4 +1,4 @@
-package com.huoteng.mapreduce;
+package com.huoteng.placeAnalyzer;
 
 /**
  * 坐标类
