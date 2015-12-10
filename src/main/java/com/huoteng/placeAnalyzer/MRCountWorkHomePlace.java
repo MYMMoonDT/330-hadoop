@@ -1,6 +1,5 @@
 package com.huoteng.placeAnalyzer;
 
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
@@ -11,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * 对每天的点统计，找出最终的工作地和居住地
  * Created by teng on 12/7/15.
  */
 public class MRCountWorkHomePlace {

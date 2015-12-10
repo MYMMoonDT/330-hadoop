@@ -15,13 +15,13 @@ public class PlaceAnalyzerMain {
     public static void main(String[] args) throws Exception {
 
         JobConf jobEveryDayPointsConf = new JobConf(MRCountPointEveryDay.class);
-        jobEveryDayPointsConf.setJobName("CountPointEveryDay");           //设置一个用户定义的job名称
+        jobEveryDayPointsConf.setJobName("CountPointsEveryDay");           //设置一个用户定义的job名称
 
         jobEveryDayPointsConf.setOutputKeyClass(Text.class);    //为job的输出数据设置Key类
         jobEveryDayPointsConf.setOutputValueClass(Text.class);   //为job输出设置value类
 
         jobEveryDayPointsConf.setMapperClass(MRCountPointEveryDay.TrackMap.class);         //为job设置Mapper类
-        jobEveryDayPointsConf.setCombinerClass(MRCountPointEveryDay.TrackCombine.class);      //为job设置Combiner类
+        jobEveryDayPointsConf.setCombinerClass(MRCountPointEveryDay.TrackReduce.class);      //为job设置Combiner类
         jobEveryDayPointsConf.setReducerClass(MRCountPointEveryDay.TrackReduce.class);        //为job设置Reduce类
         jobEveryDayPointsConf.setNumReduceTasks(3);             //设置reduce任务的数量
 
@@ -30,7 +30,8 @@ public class PlaceAnalyzerMain {
 
         jobEveryDayPointsConf.set("mapred.reduce.child.java.opts", "-Xmx512m");
         Path rawDataInputPath = new Path("big_input");
-        Path placeAnalyzer_middle = new Path("middle_placeAnayzer");
+//        Path rawDataInputPath = new Path("input");//test
+        Path placeAnalyzer_middle = new Path("middle_workHomePlace");
         placeAnalyzer_middle.getFileSystem(jobEveryDayPointsConf).delete(placeAnalyzer_middle, true);
         FileInputFormat.setInputPaths(jobEveryDayPointsConf, rawDataInputPath);
         FileOutputFormat.setOutputPath(jobEveryDayPointsConf, placeAnalyzer_middle);
@@ -54,7 +55,7 @@ public class PlaceAnalyzerMain {
         jobWorkHomePlaceCountConf.setOutputFormat(TextOutputFormat.class);  //为map-reduce任务设置OutputFormat实现类
 
         jobWorkHomePlaceCountConf.set("mapred.reduce.child.java.opts", "-Xmx512m");
-        Path middleInput = new Path("middle_placeAnayzer");
+        Path middleInput = new Path("middle_workHomePlace");
         Path result_workHomePlace = new Path("result_workHomePlace");
         result_workHomePlace.getFileSystem(jobWorkHomePlaceCountConf).delete(result_workHomePlace, true);
         FileInputFormat.setInputPaths(jobWorkHomePlaceCountConf, middleInput);
@@ -71,18 +72,19 @@ public class PlaceAnalyzerMain {
 
 //        control.run();
 
+        //这里有问题，如何修改为自动关闭
         Thread thread = new Thread(control);
         thread.start();
 
         while (true) {
             if (control.allFinished()) {
                 System.out.println(control.getSuccessfulJobs());
-                control.stop();
+//                thread.stop();
                 System.exit(0);
             }
             if (control.getFailedJobs().size() > 0) {
                 System.out.println(control.getFailedJobList());
-                control.stop();
+//                thread.stop();
                 System.exit(0);
             }
         }

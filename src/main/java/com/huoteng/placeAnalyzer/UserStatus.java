@@ -12,13 +12,15 @@ import java.util.TimeZone;
  * Created by teng on 11/5/15.
  */
 public class UserStatus {
-    static public final int WEEKEND = 3;
-    static public final int WEEKDAY = 2;
-    static public final int NO_NEED = 1;
+
+//    static public final int WEEKEND = 3;
+//    static public final int WEEKDAY = 2;
+//    static public final int NO_NEED = 1;
+
     static public final int HOME = 4;
     static public final int WORK = 5;
 
-    static public final int TIME_00_00 = 86400;
+    static public final int TIME_00_00 = 0;
     static public final int TIME_01_00 = 3600;
     static public final int TIME_02_00 = 7200;
     static public final int TIME_03_00 = 10800;
@@ -26,11 +28,11 @@ public class UserStatus {
     static public final int TIME_08_50 = 31800;
     static public final int TIME_10_00 = 36000;
     static public final int TIME_11_00 = 39600;
-    static public final int TIME_13_00 = 46800;
     static public final int TIME_14_00 = 50400;
     static public final int TIME_15_00 = 54000;
     static public final int TIME_16_OO = 57600;
     static public final int TIME_20_00 = 72000;
+    static public final int TIME_24_00 = 86400;
 
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
@@ -52,9 +54,9 @@ public class UserStatus {
             Date time_20_00 = timeFormat.parse("19:59:59");
 
             if (time.before(time_04_00) || time.after(time_20_00)) {
-                isValidTime.append(Integer.toString(HOME));
+                isValidTime.append(HOME);
             } else if (time.after(time_08_50) && time.before(time_16_00)) {
-                isValidTime.append(Integer.toString(WORK));
+                isValidTime.append(WORK);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -63,8 +65,10 @@ public class UserStatus {
         return isValidTime.toString();
     }
 
-    /** completed
+    /**
+     * completed
      * 将时间转换为当天秒数返回
+     *
      * @param dateTimeString 用户当前日期时间字符串
      * @return 用户当前时间字符串
      */
@@ -85,8 +89,10 @@ public class UserStatus {
         }
     }
 
-    /** completed
+    /**
+     * completed
      * 判断时间是否是工作日
+     *
      * @param userDateTimeString 用户日期时间String
      * @return 是需要的时间段返回true
      */
@@ -116,133 +122,71 @@ public class UserStatus {
         return isValidTime;
     }
 
-    /** completed
-     * 根据要求得到在家的时间点
-     * @param homeTimeCoordinates 已经按时间排好顺序，所有时间点的List
-     * @return time,longitude,latitude|time,longitude,latitude|......
+    /**
+     * 得到算法要求的五个点
+     * @param coordinates 已经按时间排好顺序，所有时间点的List
+     * @return time, longitude, latitude|time,longitude,latitude|......
      */
-    public static String getHomeTimePoint(List<Coordinate> homeTimeCoordinates, boolean isReduce) {
+    public static String getFivePoints(List<Coordinate> coordinates, int placeFlag) {
 
         int[] fivePoints = {-1, -1, -1, -1, -1};
 
-        // 倒序遍历list，找到离0点最近的作为0点、1点、2点、3点、4点可能的位置
-        for (int i = homeTimeCoordinates.size() - 1; i >= 0 ; i--) {
-            int currentTime = homeTimeCoordinates.get(i).time;
-            if((-1 == fivePoints[0]) && (currentTime > TIME_20_00)) {
-                fivePoints[0] = i;
-                fivePoints[1] = i;
-                fivePoints[2] = i;
-                fivePoints[3] = i;
-                fivePoints[4] = i;
-            }
-        }
-
-        // 正序遍历list，找到最接近1点、2点、3点、4点可能的位置
-        for(int i = 0; i < homeTimeCoordinates.size(); i++) {
-            int currentTime = homeTimeCoordinates.get(i).time;
-            if ((currentTime <= TIME_01_00) && (currentTime > 0)) {
-                fivePoints[1] = i;
-            }
-            if ((currentTime <= TIME_02_00) && (currentTime > TIME_01_00)) {
-                fivePoints[2] = i;
-            }
-            if ((currentTime <= TIME_03_00) && (currentTime > TIME_02_00)) {
-                fivePoints[3] = i;
-            }
-            if ((currentTime <= TIME_04_00) && (currentTime > TIME_03_00)) {
-                fivePoints[4] = i;
-            }
-        }
-
-        if (isReduce) {
-            for (int i = 0; i < 5; i++) {
-                if (-1 == fivePoints[i]) {
-                    for (int j = i; j >= 0 ; j--) {
-                        if (-1 != fivePoints[j]) {
-                            fivePoints[i] = fivePoints[j];
-                            break;
-                        }
+        switch (placeFlag) {
+            case HOME:
+                for (int i = coordinates.size() - 1; i >= 0; i--) {
+                    if (-1 == fivePoints[4] && coordinates.get(i).time <= TIME_04_00) {
+                        fivePoints[4] = i;
+                    }
+                    if (-1 == fivePoints[3] && coordinates.get(i).time <= TIME_03_00) {
+                        fivePoints[3] = i;
+                    }
+                    if (-1 == fivePoints[2] && coordinates.get(i).time <= TIME_02_00) {
+                        fivePoints[2] = i;
+                    }
+                    if (-1 == fivePoints[1] && coordinates.get(i).time <= TIME_01_00) {
+                        fivePoints[1] = i;
+                    }
+                    if (-1 == fivePoints[0] && coordinates.get(i).time <= TIME_00_00) {
+                        fivePoints[0] = i;
                     }
                 }
-            }
-        }
-
-        StringBuffer isValidTime = new StringBuffer();
-        for (int i = 0; i < 5; i++) {
-            if (-1 != fivePoints[i]) {
-                Coordinate validCoordinate = homeTimeCoordinates.get(fivePoints[i]);
-                String tmp = validCoordinate.time + "," + validCoordinate.getLon() + "," + validCoordinate.getLat();
-                isValidTime.append(tmp);
-                isValidTime.append("|");
-            }
-        }
-        if (isValidTime.length() > 0) {
-            isValidTime.deleteCharAt(isValidTime.length()-1);
-        }
-
-        return isValidTime.toString();
-
-    }
-
-
-
-
-    /** completed
-     * 根据要求得到在工作地的时间点
-     * @param workTimeCoordinates 已经按时间排好顺序，所有时间点的List
-     * @return time,longitude,latitude|time,longitude,latitude|......
-     */
-    public static String getWorkTimePoint(List<Coordinate> workTimeCoordinates, boolean isReduce) {
-        int[] fivePoints = {-1, -1, -1, -1, -1};
-
-        // 正序遍历list，找到最接近10点、11点、14点、15点、16点的位置
-        for (int i = 0; i < workTimeCoordinates.size(); i++) {
-            int currentTime = workTimeCoordinates.get(i).time;
-
-            if((currentTime <= TIME_10_00) && (currentTime > TIME_08_50)) {
-                fivePoints[0] = i;
-            }
-            if((currentTime <= TIME_11_00) && (currentTime > TIME_08_50)) {
-                fivePoints[1] = i;
-            }
-            if((currentTime <= TIME_14_00) && (currentTime > TIME_08_50)) {
-                fivePoints[2] = i;
-            }
-            if((currentTime <= TIME_15_00) && (currentTime > TIME_08_50)) {
-                fivePoints[3] = i;
-            }
-            if((currentTime <= TIME_16_OO) && (currentTime > TIME_08_50)) {
-                fivePoints[4] = i;
-            }
-        }
-
-        if (isReduce) {
-            for (int i = 0; i < 5; i++) {
-                if (-1 == fivePoints[i]) {
-                    for (int j = i; j >= 0 ; j--) {
-                        if (-1 != fivePoints[j]) {
-                            fivePoints[i] = fivePoints[j];
-                            break;
-                        }
+                break;
+            case WORK:
+                for (int i = coordinates.size() - 1; i >= 0; i--) {
+                    if (-1 == fivePoints[4] && coordinates.get(i).time <= TIME_16_OO) {
+                        fivePoints[4] = i;
+                    }
+                    if (-1 == fivePoints[3] && coordinates.get(i).time <= TIME_15_00) {
+                        fivePoints[3] = i;
+                    }
+                    if (-1 == fivePoints[2] && coordinates.get(i).time <= TIME_14_00) {
+                        fivePoints[2] = i;
+                    }
+                    if (-1 == fivePoints[1] && coordinates.get(i).time <= TIME_11_00) {
+                        fivePoints[1] = i;
+                    }
+                    if (-1 == fivePoints[0] && coordinates.get(i).time <= TIME_10_00) {
+                        fivePoints[0] = i;
                     }
                 }
-            }
+                break;
         }
 
-        StringBuffer isValidTime = new StringBuffer();
-        for (int i = 0; i < 5; i++) {
-            if (-1 != fivePoints[i]) {
-                Coordinate validCoordinate = workTimeCoordinates.get(fivePoints[i]);
-                String tmp = validCoordinate.time + "," + validCoordinate.getLon() + "," + validCoordinate.getLat();
-                isValidTime.append(tmp);
-                isValidTime.append("|");
+        StringBuffer validCoordinates = new StringBuffer();
+        for (int i : fivePoints) {
+            if (-1 != i) {
+                Coordinate tmp = coordinates.get(i);
+                String str = tmp.time + "," + tmp.getLon() + "," + tmp.getLat();
+                validCoordinates.append(str);
+                validCoordinates.append("|");
             }
         }
-        if (isValidTime.length() > 0) {
-            isValidTime.deleteCharAt(isValidTime.length()-1);
+        if (validCoordinates.length() > 0) {
+            validCoordinates.deleteCharAt(validCoordinates.length() - 1);
         }
 
-        return isValidTime.toString();
+        return validCoordinates.toString();
+
 
     }
 }

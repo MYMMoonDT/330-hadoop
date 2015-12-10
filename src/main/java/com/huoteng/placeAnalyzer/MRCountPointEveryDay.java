@@ -12,10 +12,12 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Map Reduce获得每天每个用户在家的和在工作地的五个点
  * Created by teng on 12/7/15.
  */
 public class MRCountPointEveryDay {
 
+    //Map处理原始数据，将每个用户的的时间处理为当天从0点开始的秒数
     public static class TrackMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 
         private Text keyText = new Text();
@@ -27,7 +29,7 @@ public class MRCountPointEveryDay {
             String[] userTrack = lineData.split("\\|");
 
             if (UserStatus.judgeTimeValid(userTrack[1])) {
-                //key = MSID|date
+                //key = MSID|date|place
                 StringBuffer keyStringBuffer = new StringBuffer(userTrack[0]);
                 keyStringBuffer.append("|");
 
@@ -39,6 +41,9 @@ public class MRCountPointEveryDay {
                     int day = Integer.parseInt(userDate.substring(8, 10));
                     day++;
                     userDate = userDate.substring(0, 8) + new DecimalFormat("00").format(day);
+
+                    //并且将time换算成负数
+                    userTime = userTime - UserStatus.TIME_24_00;
                 }
 
                 keyStringBuffer.append(userDate);
@@ -56,46 +61,7 @@ public class MRCountPointEveryDay {
     }
 
 
-
-    public static class TrackCombine extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
-
-        private Text resultText = new Text();
-
-        public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
-            List<Coordinate> coordinatesList = new ArrayList<Coordinate>();
-
-            while (values.hasNext()) {
-                String records = values.next().toString();
-
-                String[] recordsArray = records.split("\\|");
-                for (String oneRecord : recordsArray) {
-                    if (!oneRecord.equals("")) {
-                        String[] oneRecordArray = oneRecord.split(",");
-
-                        int userTime = Integer.parseInt(oneRecordArray[0]);
-                        coordinatesList.add(new Coordinate(oneRecordArray[2], oneRecordArray[1], userTime));
-                    }
-                }
-            }
-
-            Collections.sort(coordinatesList);
-
-
-
-            String keyString = key.toString();
-            String[] tmp = keyString.split("\\|");
-            if (tmp[2].equals(Integer.toString(UserStatus.HOME))) {
-                String homePointsString = UserStatus.getHomeTimePoint(coordinatesList, false);
-                resultText.set(homePointsString);
-            } else if (tmp[2].equals(Integer.toString(UserStatus.WORK))) {
-                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList, false);
-                resultText.set(worksPointString);
-            }
-            output.collect(key, resultText);
-        }
-    }
-
-
+    //统计每天的五个点
     public static class TrackReduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
 
         private Text resultText = new Text();
@@ -125,13 +91,9 @@ public class MRCountPointEveryDay {
 
             String keyString = key.toString();
             String[] tmp = keyString.split("\\|");
-            if (tmp[2].equals(Integer.toString(UserStatus.HOME))) {
-                String homePointsString = UserStatus.getHomeTimePoint(coordinatesList, true);
-                resultText.set(homePointsString);
-            } else if (tmp[2].equals(Integer.toString(UserStatus.WORK))) {
-                String worksPointString = UserStatus.getWorkTimePoint(coordinatesList, true);
-                resultText.set(worksPointString);
-            }
+            String pointsStr = UserStatus.getFivePoints(coordinatesList, Integer.parseInt(tmp[2]));
+
+            resultText.set(pointsStr);
             output.collect(key, resultText);
 
         }

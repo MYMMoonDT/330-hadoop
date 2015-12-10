@@ -11,17 +11,6 @@ import java.util.ArrayList;
  */
 public class DataCount {
 
-
-//    FileReader reader = new FileReader("D:\\lbhdev\\feisanWeb\\src\\265_url.txt");
-//    BufferedReader br = new BufferedReader(reader);
-//    String s1 = null;
-//    while((s1 = br.readLine()) != null) {
-//    }
-//    br.close();
-//    reader.close()
-
-
-
     //找到2015-04-16的所有数据
     public static void main(String[] args) throws Exception {
         FileReader reader = new FileReader("/Users/huoteng/Desktop/output/middle/middle.txt");
@@ -54,6 +43,7 @@ public class DataCount {
                                 if (times.get(i) > UserStatus.TIME_03_00 && 0 != i) {
                                     output3.write(detail[0] + "|3点|" + values[i-1]);
                                     output3.write("\n");
+                                    break;
                                 }
                             }
                             break;
