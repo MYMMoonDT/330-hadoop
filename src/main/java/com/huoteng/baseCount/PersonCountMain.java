@@ -35,8 +35,6 @@ public class PersonCountMain {
         jobWashDataConf.setInputFormat(TextInputFormat.class);    //为map-reduce任务设置InputFormat实现类
         jobWashDataConf.setOutputFormat(TextOutputFormat.class);  //为map-reduce任务设置OutputFormat实现类
 
-//        jobWashDataConf.set("mapred.reduce.child.java.opts", "-Xmx512m");
-
         Path rawDatainput = new Path("big_input");
 //        Path inputPath = new Path("input");//test
         Path middle_countPersonNumoutputPath = new Path("middle_CountPersonNum");
@@ -77,17 +75,18 @@ public class PersonCountMain {
 
 //        control.run();
 
+        //这里有问题，会导致最后的mapreduce任务完毕时程序崩溃，考虑如何修改为自动推出程序
         Thread thread = new Thread(control);
         thread.start();
         while (true) {
             if (control.allFinished()) {
                 System.out.println(control.getSuccessfulJobs());
-                control.stop();
+//                control.stop();
                 System.exit(0);
             }
             if (control.getFailedJobs().size() > 0) {
                 System.out.println(control.getFailedJobList());
-                control.stop();
+//                control.stop();
                 System.exit(0);
             }
         }

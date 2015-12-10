@@ -1,6 +1,7 @@
 package com.huoteng.placeAnalyzer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,10 +59,6 @@ public class ReduceStatistics {
      */
     public static String countPoint(List<Coordinate> oneDayPoints, int countStandard) {
 
-
-        //这里有问题
-        //应该遍历所有点，最后找出sum最大的点，判断是否大于等于要求的countStandard，如果大于等于认为该点有效
-        //考虑如果value是空，mapreduce如何处理
         if (oneDayPoints.size() >= countStandard) {
             for (int i = 0; i < oneDayPoints.size(); i++) {
                 for (int j = 0; j < oneDayPoints.size(); j++) {

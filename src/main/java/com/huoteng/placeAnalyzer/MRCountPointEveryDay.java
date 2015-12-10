@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * 第一个Mapreduce没有问题，问题出在第二个Map Reduce上
  * Map Reduce获得每天每个用户在家的和在工作地的五个点
  * Created by teng on 12/7/15.
  */
