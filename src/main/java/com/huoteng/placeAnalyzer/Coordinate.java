@@ -9,12 +9,14 @@ public class Coordinate implements Comparable<Coordinate> {
     private String lon;
     public int time;
     public int sum;
+    public double distance;
 
     public Coordinate(String lat, String lon, int time) {
         this.time = time;
         this.lat = lat;
         this.lon = lon;
         sum = 1;
+        distance = 0.0;
     }
 
     public String getLat() {

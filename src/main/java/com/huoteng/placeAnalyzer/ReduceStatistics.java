@@ -78,6 +78,37 @@ public class ReduceStatistics {
                     max = point;
                 }
             }
+
+            // 选择最可能点的逻辑更改：如果包含的其他点个数相同，还要比较到其他点的距离总和，最小的胜出
+            List<Coordinate> maxList = new ArrayList<Coordinate>();
+            maxList.add(max);
+            for (Coordinate point : oneDayPoints) {
+                if (point.sum == max.sum && point != max) {
+                    maxList.add(point);
+                }
+            }
+
+            if(maxList.size() > 1) {
+                for(int i = 0; i < maxList.size(); i++) {
+                    Coordinate maxCoordinate = maxList.get(i);
+                    maxCoordinate.distance = 0.0;
+                    for (Coordinate point : oneDayPoints) {
+                        double lng1 = Double.parseDouble(point.getLon());
+                        double lat1 = Double.parseDouble(point.getLat());
+                        double lng2 = Double.parseDouble(maxCoordinate.getLon());
+                        double lat2 = Double.parseDouble(maxCoordinate.getLat());
+
+                        maxCoordinate.distance += getDistance(lng1, lat1, lng2, lat2);
+                    }
+                }
+                max = maxList.get(0);
+                for(Coordinate point : maxList) {
+                    if(point != max && point.distance < max.distance) {
+                        max = point;
+                    }
+                }
+            }
+
             if (max.sum >= countStandard) {
                 result = max.time + "," + max.getLon() + "," + max.getLat();
             }

@@ -4,7 +4,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
-import org.apache.hadoop.mapred.jobcontrol.JobControl;
+import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
 
 /**
@@ -80,11 +80,11 @@ public class PersonCountMain {
         thread.start();
         while (true) {
             if (control.allFinished()) {
-                System.out.println(control.getSuccessfulJobs());
+                System.out.println(control.getSuccessfulJobList());
 //                control.stop();
                 System.exit(0);
             }
-            if (control.getFailedJobs().size() > 0) {
+            if (control.getFailedJobList().size() > 0) {
                 System.out.println(control.getFailedJobList());
 //                control.stop();
                 System.exit(0);

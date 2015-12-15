@@ -50,7 +50,8 @@ public class MRCountWorkHomePlace {
                     //000015cac9cb2c30cb32de1dd5e149b3|2015-04-07|5
                     String[] userMSIDDatePlace = keyDatePlaceString.split("\\|");
 
-                    keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[1] + "|" +  userMSIDDatePlace[2]);
+                    // keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[1] + "|" +  userMSIDDatePlace[2]);
+                    keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[2]);
                     resultText.set(mapResult);
                     output.collect(keyText, resultText);
                 }

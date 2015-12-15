@@ -3,8 +3,9 @@ package com.huoteng.placeAnalyzer;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
-import org.apache.hadoop.mapred.jobcontrol.JobControl;
+import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
 import org.apache.hadoop.mapreduce.lib.jobcontrol.ControlledJob;
+
 
 /**
  * 分析用户工作地和居住地MapReduce
@@ -83,11 +84,11 @@ public class PlaceAnalyzerMain {
 
         while (true) {
             if (control.allFinished()) {
-                System.out.println(control.getSuccessfulJobs());
+                System.out.println(control.getSuccessfulJobList());
 //                thread.stop();
                 System.exit(0);
             }
-            if (control.getFailedJobs().size() > 0) {
+            if (control.getFailedJobList().size() > 0) {
                 System.out.println(control.getFailedJobList());
 //                thread.stop();
                 System.exit(0);
