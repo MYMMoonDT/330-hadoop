@@ -18,6 +18,10 @@ import java.util.List;
  */
 public class MRCountWorkHomePlace {
 
+    /**
+     * 统计一天的居住地和工作地
+     * 16号的数据与丁亮的数据完全吻合（12.13）
+     */
     public static class WorkHomePlaceMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 
         private Text keyText = new Text();
@@ -50,7 +54,8 @@ public class MRCountWorkHomePlace {
                     //000015cac9cb2c30cb32de1dd5e149b3|2015-04-07|5
                     String[] userMSIDDatePlace = keyDatePlaceString.split("\\|");
 
-                    keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[1] + "|" +  userMSIDDatePlace[2]);
+                    //keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[1] + "|" +  userMSIDDatePlace[2]);测试用
+                    keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[2]);
                     resultText.set(mapResult);
                     output.collect(keyText, resultText);
                 }
@@ -62,6 +67,9 @@ public class MRCountWorkHomePlace {
     }
 
 
+    /**
+     * 统计10天的工作地和居住地
+     */
     public static class WorkHomePlaceReduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
 
         private Text resultText = new Text();

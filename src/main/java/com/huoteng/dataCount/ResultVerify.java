@@ -11,26 +11,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * 用于数据验证
+ * 用于z数据验证
  * Created by teng on 12/10/15.
  */
 public class ResultVerify {
 
     //找到2015-04-16的所有数据
     public static void main(String[] args) throws Exception {
-        FileReader reader = new FileReader("/Users/huoteng/Desktop/output/middle/everydayResult.txt");
+        FileReader reader = new FileReader("/Users/huoteng/Desktop/output/result/result12.14.txt");
         BufferedReader bufferedReader = new BufferedReader(reader);
 
-        BufferedWriter output3 = new BufferedWriter(new FileWriter("/Users/huoteng/Desktop/output/day16Result.txt"));
+        BufferedWriter output3 = new BufferedWriter(new FileWriter("/Users/huoteng/Desktop/output/Result12.14.txt"));
         BufferedWriter output14 = new BufferedWriter(new FileWriter("/Users/huoteng/Desktop/output/result14.txt"));
 
         String tmp = bufferedReader.readLine();
 
         while (null != tmp) {
-            String[] detail = tmp.split("\\|");
+//            String[] detail = tmp.split("\\|");
 
             //匹配每一行，找到16号的数据
-            if (detail[1].equals("2015-04-16")) {
+//            if (detail[1].equals("2015-04-16")) {
                 //找到16的数据找出3点和14点的数据
                 tmp = tmp.replace("|", ",");
                 tmp = tmp.replace("\t", ",");
@@ -85,7 +85,7 @@ public class ResultVerify {
 //                            break;
 //                    }
 //                }
-            }
+//            }
             tmp = bufferedReader.readLine();
         }
 
