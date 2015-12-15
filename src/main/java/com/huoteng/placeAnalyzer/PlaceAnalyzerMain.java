@@ -51,7 +51,7 @@ public class PlaceAnalyzerMain {
 
         jobWorkHomePlaceCountConf.setMapperClass(MRCountWorkHomePlace.WorkHomePlaceMap.class);         //为job设置Mapper类
         //要在这里禁用Combine
-//        jobWorkHomePlaceCountConf.setReducerClass(MRCountWorkHomePlace.WorkHomePlaceReduce.class);        //为job设置Reduce类
+        jobWorkHomePlaceCountConf.setReducerClass(MRCountWorkHomePlace.WorkHomePlaceReduce.class);        //为job设置Reduce类
         jobWorkHomePlaceCountConf.setNumReduceTasks(3);             //设置reduce任务的数量
 
         jobWorkHomePlaceCountConf.setInputFormat(TextInputFormat.class);    //为map-reduce任务设置InputFormat实现类
