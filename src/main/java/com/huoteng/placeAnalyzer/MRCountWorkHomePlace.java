@@ -2,7 +2,8 @@ package com.huoteng.placeAnalyzer;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,42 +23,47 @@ public class MRCountWorkHomePlace {
      * 统计一天的居住地和工作地
      * 16号的数据与丁亮的数据完全吻合（12.13）
      */
-    public static class WorkHomePlaceMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
+    public static class WorkHomePlaceMap extends Mapper<LongWritable, Text, Text, Text> {
 
         private Text keyText = new Text();
         private Text resultText = new Text();
 
-        public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String lineData = value.toString();
 
-            String[] userTrack = lineData.split("\\t");
+            String[] userTrack = lineData.split("\t");
 
             if (userTrack.length >= 2) {
                 String keyDatePlaceString = userTrack[0];
                 String track = userTrack[1];
 
-                String[] tracksArray = track.split("\\|");
+                //000015cac9cb2c30cb32de1dd5e149b3|2015-04-07|5
+                String[] userMSIDDatePlace = keyDatePlaceString.split("\\|");
 
-                List<Coordinate> oneDayCoordinates = new ArrayList<Coordinate>();
+                if(!userMSIDDatePlace[1].equals("2015-04-07")) {
 
-                for (String point : tracksArray) {
-                    if (!point.equals("")) {
-                        String[] pointDetail = point.split(",");
+                    String[] tracksArray = track.split("\\|");
 
-                        int time = Integer.parseInt(pointDetail[0]);
-                        oneDayCoordinates.add(new Coordinate(pointDetail[2], pointDetail[1], time));
+                    List<Coordinate> oneDayCoordinates = new ArrayList<Coordinate>();
+
+                    for (String point : tracksArray) {
+                        if (!point.equals("")) {
+                            String[] pointDetail = point.split(",");
+
+                            int time = Integer.parseInt(pointDetail[0]);
+                            oneDayCoordinates.add(new Coordinate(pointDetail[2], pointDetail[1], time));
+                        }
                     }
-                }
 
-                String mapResult = ReduceStatistics.countPoint(oneDayCoordinates, 3);
-                if (!mapResult.equals("")) {
-                    //000015cac9cb2c30cb32de1dd5e149b3|2015-04-07|5
-                    String[] userMSIDDatePlace = keyDatePlaceString.split("\\|");
-                    
-                    //keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[1] + "|" +  userMSIDDatePlace[2]);测试用
-                    keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[2]);
-                    resultText.set(mapResult);
-                    output.collect(keyText, resultText);
+                    String mapResult = ReduceStatistics.countPoint(oneDayCoordinates, 3);
+                    if (!mapResult.equals("")) {
+
+                        keyText.set(userMSIDDatePlace[0] + "|" + userMSIDDatePlace[2]);
+                        resultText.set(mapResult);
+                        context.write(keyText, resultText);
+
+                    }
+
                 }
             } else {
                 System.out.println("Empty LINE:" + lineData);
@@ -70,16 +76,16 @@ public class MRCountWorkHomePlace {
     /**
      * 统计10天的工作地和居住地
      */
-    public static class WorkHomePlaceReduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
+    public static class WorkHomePlaceReduce extends Reducer<Text, Text, Text, Text> {
 
         private Text resultText = new Text();
 
-        public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+        public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
             List<Coordinate> coordinatesList = new ArrayList<Coordinate>();
 
-            while (values.hasNext()) {
-                String oneDayRecord = values.next().toString();
+            for (Text value : values) {
+                String oneDayRecord = value.toString();
 
                 String[] recordDetail = oneDayRecord.split(",");
                 int time = Integer.parseInt(recordDetail[0]);
@@ -88,12 +94,12 @@ public class MRCountWorkHomePlace {
 
             //10天的数据取有6天以上认为有效
             String result = ReduceStatistics.countPoint(coordinatesList, 6);
+            // 正常
             if (!result.equals("")) {
                 resultText.set(result);
-                output.collect(key, resultText);
+                context.write(key, resultText);
             }
         }
-
-
     }
+
 }

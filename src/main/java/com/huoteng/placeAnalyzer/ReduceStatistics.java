@@ -11,8 +11,6 @@ import java.util.List;
 public class ReduceStatistics {
     private static final double EARTH_RADIUS = 6378137;
 
-    private ArrayList<Coordinate> historyCoordinates = new ArrayList<Coordinate>();
-
     /**
      * completed，设定1km为标准
      * @param c1 参照坐标
@@ -27,9 +25,7 @@ public class ReduceStatistics {
         double lng2 = Double.parseDouble(c2.getLon());
         double lat2 = Double.parseDouble(c2.getLat());
 
-        double distance = getDistance(lng1, lat1, lng2, lat2);
-
-        return 1000 >= distance;
+        return 2000 >= getDistance(lng1, lat1, lng2, lat2);
     }
 
 
@@ -93,12 +89,14 @@ public class ReduceStatistics {
                     Coordinate maxCoordinate = maxList.get(i);
                     maxCoordinate.distance = 0.0;
                     for (Coordinate point : oneDayPoints) {
-                        double lng1 = Double.parseDouble(point.getLon());
-                        double lat1 = Double.parseDouble(point.getLat());
-                        double lng2 = Double.parseDouble(maxCoordinate.getLon());
-                        double lat2 = Double.parseDouble(maxCoordinate.getLat());
+                        if (twoPointIsClose(maxCoordinate, point)) {
+                            double lng1 = Double.parseDouble(point.getLon());
+                            double lat1 = Double.parseDouble(point.getLat());
+                            double lng2 = Double.parseDouble(maxCoordinate.getLon());
+                            double lat2 = Double.parseDouble(maxCoordinate.getLat());
 
-                        maxCoordinate.distance += getDistance(lng1, lat1, lng2, lat2);
+                            maxCoordinate.distance += getDistance(lng1, lat1, lng2, lat2);
+                        }
                     }
                 }
                 max = maxList.get(0);

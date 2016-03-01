@@ -2,7 +2,8 @@ package com.huoteng.placeAnalyzer;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -19,12 +20,12 @@ import java.util.List;
 public class MRCountPointEveryDay {
 
     //Map处理原始数据，将每个用户的的时间处理为当天从0点开始的秒数
-    public static class TrackMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
+    public static class TrackMap extends Mapper<LongWritable, Text, Text, Text> {
 
         private Text keyText = new Text();
         private Text resultText = new Text();
 
-        public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String lineData = value.toString();
 
             String[] userTrack = lineData.split("\\|");
@@ -56,26 +57,26 @@ public class MRCountPointEveryDay {
 
                 keyText.set(keyStringBuffer.toString());
                 resultText.set(trackValue);
-                output.collect(keyText, resultText);
+                context.write(keyText, resultText);
             }
         }
     }
 
 
     //统计每天的五个点
-    public static class TrackReduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
+    public static class TrackReduce extends Reducer<Text, Text, Text, Text> {
 
         private Text resultText = new Text();
 
         /**
          * value样例：time,longitude,latitude|time,longitude,latitude|time,longitude,latitude
          */
-        public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+        public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
             List<Coordinate> coordinatesList = new ArrayList<Coordinate>();
 
-            while (values.hasNext()) {
-                String records = values.next().toString();
+            for (Text value : values) {
+                String records = value.toString();
 
                 String[] recordsArray = records.split("\\|");
                 for (String oneRecord : recordsArray) {
@@ -95,7 +96,7 @@ public class MRCountPointEveryDay {
             String pointsStr = UserStatus.getFivePoints(coordinatesList, Integer.parseInt(tmp[2]));
 
             resultText.set(pointsStr);
-            output.collect(key, resultText);
+            context.write(key, resultText);
 
         }
 
