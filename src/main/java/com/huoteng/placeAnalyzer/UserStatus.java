@@ -123,6 +123,35 @@ public class UserStatus {
     }
 
     /**
+     *
+     * @param currentDate
+     * @return
+     */
+    public static boolean isWeekend(String currentDate) {
+        //判断是否周末
+        boolean is = false;
+        try {
+            Date date = dateFormat.parse(currentDate);
+            String week = weekFormat.format(date);
+
+            System.out.println("WEEK:" + week);
+
+            switch (week.charAt(2)) {
+                case 'a'://周六Sat
+                case 'u'://周日Sun
+                    is = true;
+                    break;
+                default:
+                    break;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return is;
+    }
+
+    /**
      * 得到算法要求的五个点
      * @param coordinates 已经按时间排好顺序，所有时间点的List
      * @return time, longitude, latitude|time,longitude,latitude|......
