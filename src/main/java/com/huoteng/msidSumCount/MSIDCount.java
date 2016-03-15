@@ -28,12 +28,10 @@ public class MSIDCount {
 
             String[] recordDetail = lineData.split("\\|");
             String MSID = recordDetail[0];
-//            String dateTimeStr = recordDetail[1];
-
-//            String dateStr = new String(dateTimeStr.substring(0, 10));
 
             keyText.set(MSID);
             resultText.set("1");
+            output.collect(keyText, resultText);
         }
     }
 
@@ -43,18 +41,10 @@ public class MSIDCount {
 
         public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 
-            while (values.hasNext()) {
-                String records = values.next().toString();
-
-            }
-
             resultText.set("1");
-
             output.collect(key, resultText);
 
         }
-
-
     }
 
     public static void main(String[] args) throws Exception
@@ -70,7 +60,6 @@ public class MSIDCount {
         conf.setOutputValueClass(Text.class);   //为job输出设置value类
 
         conf.setMapperClass(Map.class);         //为job设置Mapper类
-        conf.setCombinerClass(Reduce.class);      //为job设置Combiner类
         conf.setReducerClass(Reduce.class);        //为job设置Reduce类
         conf.setNumReduceTasks(3);             //设置reduce任务的数量
 
@@ -78,7 +67,7 @@ public class MSIDCount {
         conf.setOutputFormat(TextOutputFormat.class);  //为map-reduce任务设置OutputFormat实现类
 
         Path inputPath = new Path("big_input");
-        Path result_MSIDCountPath = new Path("result_workHomePlace");
+        Path result_MSIDCountPath = new Path("result_msidCount");
         result_MSIDCountPath.getFileSystem(conf).delete(result_MSIDCountPath, true);
         FileInputFormat.setInputPaths(conf, inputPath);
         FileOutputFormat.setOutputPath(conf, result_MSIDCountPath);
