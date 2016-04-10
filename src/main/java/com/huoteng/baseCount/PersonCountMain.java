@@ -35,12 +35,12 @@ public class PersonCountMain {
         jobWashDataConf.setInputFormat(TextInputFormat.class);    //为map-reduce任务设置InputFormat实现类
         jobWashDataConf.setOutputFormat(TextOutputFormat.class);  //为map-reduce任务设置OutputFormat实现类
 
-        Path rawDatainput = new Path("big_input");
-//        Path inputPath = new Path("input");//test
-        Path middle_countPersonNumoutputPath = new Path("middle_CountPersonNum");
-        middle_countPersonNumoutputPath.getFileSystem(jobWashDataConf).delete(middle_countPersonNumoutputPath, true);
-        FileInputFormat.setInputPaths(jobWashDataConf, rawDatainput);
-        FileOutputFormat.setOutputPath(jobWashDataConf, middle_countPersonNumoutputPath);
+        Path rawDataInput = new Path("big_input");
+//        Path rawDataInput = new Path("input");//test
+        Path middle_countPersonNumOutputPath = new Path("middle_CountPersonNum");
+        middle_countPersonNumOutputPath.getFileSystem(jobWashDataConf).delete(middle_countPersonNumOutputPath, true);
+        FileInputFormat.setInputPaths(jobWashDataConf, rawDataInput);
+        FileOutputFormat.setOutputPath(jobWashDataConf, middle_countPersonNumOutputPath);
 
         ControlledJob jobWashData = new ControlledJob(jobWashDataConf);
 
@@ -50,7 +50,7 @@ public class PersonCountMain {
         jobCountConf.setJobName("CountSum");
 
         jobCountConf.setOutputKeyClass(Text.class);
-        jobCountConf.setOutputValueClass(IntWritable.class);
+        jobCountConf.setOutputValueClass(Text.class);
 
         jobCountConf.setMapperClass(MRPersonNumCount.PersonCountMap.class);
         jobCountConf.setCombinerClass(MRPersonNumCount.PersonCountReduce.class);
@@ -73,22 +73,22 @@ public class PersonCountMain {
         control.addJob(jobWashData);
         control.addJob(jobCount);
 
-//        control.run();
+        control.run();
 
         //这里有问题，会导致最后的mapreduce任务完毕时程序崩溃，考虑如何修改为自动推出程序
-        Thread thread = new Thread(control);
-        thread.start();
-        while (true) {
-            if (control.allFinished()) {
-                System.out.println(control.getSuccessfulJobList());
-//                control.stop();
-                System.exit(0);
-            }
-            if (control.getFailedJobList().size() > 0) {
-                System.out.println(control.getFailedJobList());
-//                control.stop();
-                System.exit(0);
-            }
-        }
+//        Thread thread = new Thread(control);
+//        thread.start();
+//        while (true) {
+//            if (control.allFinished()) {
+//                System.out.println(control.getSuccessfulJobList());
+////                control.stop();
+//                System.exit(0);
+//            }
+//            if (control.getFailedJobList().size() > 0) {
+//                System.out.println(control.getFailedJobList());
+////                control.stop();
+//                System.exit(0);
+//            }
+//        }
     }
 }

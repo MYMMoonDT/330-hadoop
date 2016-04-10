@@ -17,57 +17,92 @@ import java.util.Iterator;
 public class MRWashData {
     private static DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-    private static DateFormat weekFormat = new SimpleDateFormat("E");
 
-    /** completed
-     * 得到整点时间,考虑为整点过后的15分钟内
+    /**
+     * 得到整点时间,每个整点的前70分钟记为该整点
      * @param userDateTime 2015-04-07 11:12:00
-     * @return 2015-04-07 11:00:00
+     * @return RoundTime
      */
-    private static String getSharpTime(String userDateTime) {
-        String tmp = new String(userDateTime.substring(0, 14));
-        String beforTime = tmp + "00:00";
-        String afterTime = tmp + "15:00";
-        try {
-            Date beforeDateTime = dateTimeFormat.parse(beforTime);
-            Date afterDateTime = dateTimeFormat.parse(afterTime);
-            Date currentDateTime = dateTimeFormat.parse(userDateTime);
+    private static RoundTime getSharpTime(String userDateTime) {
 
-            if ((currentDateTime.getTime() >= beforeDateTime.getTime()) && (currentDateTime.getTime() <= afterDateTime.getTime())) {
-                return beforTime;
-            } else {
-                return null;
-            }
+        try {
+            Date currentDateTime = dateTimeFormat.parse(userDateTime);
+            currentDateTime.setTime(currentDateTime.getTime() + (70 * 60 * 1000));
+
+            String dateTimeStr = dateTimeFormat.format(currentDateTime);
+            String roundTimeStr = new String(dateTimeStr.substring(0, 14) + "00:00");
+
+            Date roundTime = dateTimeFormat.parse(roundTimeStr);
+            long distance = roundTime.getTime() - currentDateTime.getTime();
+
+            RoundTime time = new RoundTime(roundTimeStr, distance);
+
+            return  time;
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    /** completed
-     * 判断时间是否需要,这次只需要工作日的数据
+    /**
+     * 判断时间是否需要,这次只需要工作日的数据,暂时用不着该函数
      * @param userDateTime 2015-04-07 12:18:00
      * @return boolean
      */
-    private static boolean judgeTimeIsValued(String userDateTime) {
-        try {
-            Date date = dateTimeFormat.parse(userDateTime);
-            String day = weekFormat.format(date);
+//    private static boolean judgeTimeIsValued(String userDateTime) {
+//        try {
+//            Date date = dateTimeFormat.parse(userDateTime);
+//            String day = weekFormat.format(date);
+//
+//            if (day.equals("Sat") || day.equals("Sun")) {
+//                return false;
+//            } else {
+//                return true;
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
-            if (day.equals("Sat") || day.equals("Sun")) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+    /**
+     * 判断事件类型:12,13,14,15为通话事件,其他为综合事件
+     * @param actionNum 事件代码
+     * @return 事件类型,call/other
+     */
+    private static String judgeActionType(int actionNum) {
+
+        switch (actionNum) {
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+                return "call";
+            default:
+                return "other";
+        }
+    }
+
+    /**
+     * 比较两个时间哪个更靠近整点,秒数越小离整点越近
+     * @param firstPointDistance firstPointDistance
+     * @param secondPointDistance secondPointDistance
+     * @return
+     */
+    private static boolean newPointIsClose(long firstPointDistance, long secondPointDistance) {
+
+        if (firstPointDistance - secondPointDistance < 0) {
+            return true;
+        } else {
             return false;
         }
     }
 
     /**
      * Map1:
-     * MSID|整点日期时间    基站编号|经纬度|精确时间
+     * From:    MSID|时间|事件|基站编号|经度|纬度|不知道什么鬼
+     * To:      MSID|整点日期时间    基站编号|经纬度|距离整点秒数|事件类型  old data format:MSID|整点日期时间    基站编号|经纬度|精确时间
      */
     public static class WashDataMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 
@@ -77,54 +112,29 @@ public class MRWashData {
         public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
             String lineData = value.toString();
 
-            String[] dataDetail = lineData.split("\\|");
-            String dateTime = new String(dataDetail[1].substring(0, 19));
+            String[] rawData = lineData.split("\\|");
+            String dateTime = new String(rawData[1].substring(0, 19));
 
-            if (judgeTimeIsValued(dateTime)) {
-                String sharpTime = getSharpTime(dateTime);
+            //每个整点的前70分钟记为该整点
+            //判断事件类型:12,13,14,15为通话事件,其他为综合事件
+            RoundTime time = getSharpTime(dateTime);
+            String msid = rawData[0];
+            String signalStationNum = rawData[3];
+            String coordianteString = rawData[4] + "," + rawData[5];
 
-                if (null != sharpTime) {
-                    String accurateTime = new String(dataDetail[1].substring(12, 19));
-                    String MSID = dataDetail[0];
-                    String baseNum = dataDetail[3];
-                    String coordianteString = dataDetail[4] + "," + dataDetail[5];
+            int actionNum = Integer.parseInt(rawData[2]);
+            String actionType = judgeActionType(actionNum);
 
-                    keyText.set(MSID + "|" + sharpTime);
-                    resultText.set(baseNum + "|" + coordianteString + "|" + accurateTime);
-
-                    output.collect(keyText, resultText);
-                }
-
-            }
-        }
-    }
-
-    /** completed
-     * 比较两个点哪个更靠近整点
-     * @param currentPointTime 11:12:00
-     * @param newPointTime 11:13:00
-     * @return boolean
-     */
-    private static boolean newtPointIsClosed(String currentPointTime, String newPointTime) {
-        try {
-            Date currentDate = timeFormat.parse(currentPointTime);
-            Date newDate = timeFormat.parse(newPointTime);
-
-            if (newDate.before(currentDate)) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
+            keyText.set(msid + "|" + time.roundTimeString);
+            resultText.set(signalStationNum + "|" + coordianteString + "|" + time.roundTimeDistance + "|" + actionType);
+            output.collect(keyText, resultText);
         }
     }
 
     /**
      * Reduce1:
      * 保留一条最靠近整点的数据
-     * MSID|整点日期时间    基站编号|经纬度|精确时间
+     * MSID|整点日期时间    基站编号|经纬度|距离整点秒数|事件类型
      */
     public static class WashDataReduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
 
@@ -139,23 +149,37 @@ public class MRWashData {
 
                 String[] baseInfo = records.split("\\|");
 
+                long newPoint = Long.parseLong(baseInfo[2]);
+                //判断距离整点秒数,取离整点时间近的点
+
                 //比较两个点哪个更靠近整点
-                if (null == bestPoint.baseNum || newtPointIsClosed(bestPoint.accurateTime, baseInfo[2])) {
-                    bestPoint.baseNum = baseInfo[0];
-                    bestPoint.coordiantesStr = baseInfo[1];
-                    bestPoint.accurateTime = baseInfo[2];
+                if (null == bestPoint.signalStationNum || newPointIsClose(bestPoint.distance, newPoint)) {
+                    bestPoint.signalStationNum = baseInfo[0];
+                    bestPoint.coordinateStr = baseInfo[1];
+                    bestPoint.distance = newPoint;
+                    bestPoint.actionType = baseInfo[3];
                 }
             }
 
-            resultText.set(bestPoint.baseNum + "|" + bestPoint.coordiantesStr + "|" + bestPoint.accurateTime);
-
+            resultText.set(bestPoint.signalStationNum + "|" + bestPoint.coordinateStr + "|" + bestPoint.distance + "|" + bestPoint.actionType);
             output.collect(key, resultText);
         }
     }
 }
 
-class MostClosedSharpTimePoint{
-    public String baseNum;
-    public String coordiantesStr;
-    public String accurateTime;
+class RoundTime{
+    public String roundTimeString;
+    public long roundTimeDistance;
+
+    RoundTime(String timeStr, long distance) {
+        roundTimeString = timeStr;
+        roundTimeDistance = distance;
+    }
+}
+
+class MostClosedSharpTimePoint {
+    public String signalStationNum;
+    public String coordinateStr;
+    public long distance;
+    public String actionType;
 }
