@@ -44,7 +44,7 @@ public class PersonCountMain {
 
         ControlledJob jobWashData = new ControlledJob(jobWashDataConf);
 
-        
+
         //job2 configuration
         JobConf jobCountConf = new JobConf(MRPersonNumCount.class);
         jobCountConf.setJobName("CountSum");

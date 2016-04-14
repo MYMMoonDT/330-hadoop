@@ -14,8 +14,8 @@ import java.util.Iterator;
 public class MRPersonNumCount {
     /**
      * Map:
-     * From:    MSID|整点日期时间    基站编号|经纬度|距离整点秒数|事件类型
-     * To:      基站编号|事件类型|整点日期时间     人数＝1|经纬度
+     * From:    MSID|整点日期时间    基站编号|经纬度|距离整点秒数,call|距离整点秒数,all
+     * To:      基站编号|整点日期时间     人数＝0,call|人数=1,all|经纬度
      */
     public static class PersonCountMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 
@@ -25,18 +25,27 @@ public class MRPersonNumCount {
         public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
             String lineData = value.toString();
 
-
-            //取基站编号和时间以及事件类型为key
-            //人数计为1,同时记录经纬度
-
             String[] keyValue = lineData.split("\\t");
             if (keyValue.length > 1) {
                 String[] keyDetail = keyValue[0].split("\\|");
                 String[] valueDetail = keyValue[1].split("\\|");
 
-                keyText.set(valueDetail[0] + "|" + valueDetail[3] + "|" + keyDetail[1]);
-                result.set("1" + "|" + valueDetail[1]);
+                //取基站编号和整点时间为key
+                keyText.set(valueDetail[0] + "|" + keyDetail[1]);
 
+                //格式化distance,如果call事件没有距离人数设为0,all始终设为1
+                String[] callInfo = valueDetail[2].split(",");
+                String[] allInfo = valueDetail[3].split(",");
+                String outputCallInfo;
+                try {
+                    long callDistance = Long.parseLong(callInfo[0]);
+                    outputCallInfo = "1,call";
+                } catch (java.lang.NumberFormatException e) {
+                    outputCallInfo = "0,call";
+                }
+
+                //输出
+                result.set(outputCallInfo + "|1,all|" + valueDetail[1]);
                 output.collect(keyText, result);
             }
         }
@@ -44,7 +53,7 @@ public class MRPersonNumCount {
 
     /**
      * Reduce:
-     * 统计:  基站编号|经纬度|整点日期时间     人数++
+     * 统计:  基站编号|整点日期时间     人数++,call|人数++,all|经纬度
      */
     public static class PersonCountReduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
 
@@ -53,22 +62,27 @@ public class MRPersonNumCount {
         public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 
             //计数
-
-            int sum = 0;
+            int callSum = 0;
+            int allSum = 0;
             String coordinateStr = null;
             while (values.hasNext()) {
                 String valueStr = values.next().toString();
                 String[] valueDetail = valueStr.split("\\|");
-                int number = Integer.parseInt(valueDetail[0]);
+                int callNum = Integer.parseInt(valueDetail[0].split(",")[0]);
+                int allNum = Integer.parseInt(valueDetail[1].split(",")[0]);
 
                 if (null == coordinateStr) {
                     coordinateStr = valueDetail[1];
                 }
 
-                sum += number;
+                callSum += callNum;
+                allSum += allNum;
             }
 
-            result.set(sum + "|" + coordinateStr);
+            if (callSum > allSum) {
+                result.set("error,call|error,all|error");
+            }
+            result.set(callSum + ",call|" + allSum + ",all|" + coordinateStr);
             output.collect(key, result);
         }
     }

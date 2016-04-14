@@ -80,7 +80,7 @@ public class MRWashData {
             case 15:
                 return "call";
             default:
-                return "other";
+                return "all";
         }
     }
 
@@ -102,7 +102,7 @@ public class MRWashData {
     /**
      * Map1:
      * From:    MSID|时间|事件|基站编号|经度|纬度|不知道什么鬼
-     * To:      MSID|整点日期时间    基站编号|经纬度|距离整点秒数|事件类型  old data format:MSID|整点日期时间    基站编号|经纬度|精确时间
+     * To:      MSID|整点日期时间    基站编号|经纬度|距离整点秒数,call|距离整点秒数,all
      */
     public static class WashDataMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 
@@ -115,6 +115,9 @@ public class MRWashData {
             String[] rawData = lineData.split("\\|");
             String dateTime = new String(rawData[1].substring(0, 19));
 
+            int actionNum = Integer.parseInt(rawData[2]);
+            String actionType = judgeActionType(actionNum);
+
             //每个整点的前70分钟记为该整点
             //判断事件类型:12,13,14,15为通话事件,其他为综合事件
             RoundTime time = getSharpTime(dateTime);
@@ -122,11 +125,15 @@ public class MRWashData {
             String signalStationNum = rawData[3];
             String coordianteString = rawData[4] + "," + rawData[5];
 
-            int actionNum = Integer.parseInt(rawData[2]);
-            String actionType = judgeActionType(actionNum);
-
             keyText.set(msid + "|" + time.roundTimeString);
-            resultText.set(signalStationNum + "|" + coordianteString + "|" + time.roundTimeDistance + "|" + actionType);
+            if (actionType.equals("all")) {
+                resultText.set(signalStationNum + "|" + coordianteString + "|null,call|" + time.roundTimeDistance + ",all");
+            } else {
+                resultText.set(signalStationNum + "|" + coordianteString + "|" + time.roundTimeDistance + ",call|" + time.roundTimeDistance + ",all");
+            }
+
+
+
             output.collect(keyText, resultText);
         }
     }
@@ -134,7 +141,7 @@ public class MRWashData {
     /**
      * Reduce1:
      * 保留一条最靠近整点的数据
-     * MSID|整点日期时间    基站编号|经纬度|距离整点秒数|事件类型
+     * MSID|整点日期时间    基站编号|经纬度|距离整点秒数,call|距离整点秒数,all    如果没有call事件,distance设为null
      */
     public static class WashDataReduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
 
@@ -143,25 +150,50 @@ public class MRWashData {
         public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 
             MostClosedSharpTimePoint bestPoint = new MostClosedSharpTimePoint();
+            MostClosedSharpTimePoint bestCallPoint = new MostClosedSharpTimePoint();
+            //设两个点,一个call事件最近,一个all事件最近
 
             while (values.hasNext()) {
                 String records = values.next().toString();
 
+                //格式化distance,判断格式化call事件的distance是否有异常,没有异常说明有数据,比较和之前的数据哪个近
                 String[] baseInfo = records.split("\\|");
-
-                long newPoint = Long.parseLong(baseInfo[2]);
+                String[] callInfo = baseInfo[2].split(",");
+                String[] allInfo = baseInfo[3].split(",");
+                long newCallDistance;
+                try {
+                    newCallDistance = Long.parseLong(callInfo[0]);
+                } catch (java.lang.NumberFormatException e) {
+                    continue;
+                }
+                long newAllDistance = Long.parseLong(allInfo[0]);
                 //判断距离整点秒数,取离整点时间近的点
 
-                //比较两个点哪个更靠近整点
-                if (null == bestPoint.signalStationNum || newPointIsClose(bestPoint.distance, newPoint)) {
+                //all 比较两个点哪个更靠近整点
+                if (null == bestPoint.signalStationNum || newPointIsClose(bestPoint.distance, newAllDistance)) {
                     bestPoint.signalStationNum = baseInfo[0];
                     bestPoint.coordinateStr = baseInfo[1];
-                    bestPoint.distance = newPoint;
-                    bestPoint.actionType = baseInfo[3];
+                    bestPoint.distance = newAllDistance;
+                    bestPoint.actionType = "all";
+                }
+
+                //call 比较两个点哪个更靠近整点
+                if (null == bestCallPoint.signalStationNum || newPointIsClose(bestCallPoint.distance, newCallDistance)) {
+                    bestCallPoint.signalStationNum = baseInfo[0];
+                    bestPoint.coordinateStr = baseInfo[1];
+                    bestPoint.distance = newCallDistance;
+                    bestPoint.actionType = "call";
                 }
             }
 
-            resultText.set(bestPoint.signalStationNum + "|" + bestPoint.coordinateStr + "|" + bestPoint.distance + "|" + bestPoint.actionType);
+            //比较call事件和all时间的distance,call事件的distance应该大于等于all事件的distance
+            if (bestCallPoint.distance < bestPoint.distance) {
+                resultText.set(bestPoint.signalStationNum + "|" + bestPoint.coordinateStr + "|error,call|error,all");
+            } else {
+                //输出
+                resultText.set(bestPoint.signalStationNum + "|" + bestPoint.coordinateStr + "|" + bestCallPoint.distance + ",call|" + bestPoint.distance + ",all");
+            }
+
             output.collect(key, resultText);
         }
     }
